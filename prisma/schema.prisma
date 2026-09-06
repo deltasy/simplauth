@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  email String @unique
+  passwordHash String
+
+  username String? @unique
+
+  permission Permission @default(MEMBER)
+
+  task Task[]
+
+}
+
+enum Permission {
+  MEMBER
+  ADMIN
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  owner_id String
+
+  createdAt DateTime @default(now())
+  state State
+  focusLevel FocusType?
+
+  name String
+
+  owner User @relation(fields:[owner_id], references: [id])
+}
+
+enum State {
+  FOCUS
+  PAUSE
+  LAPSE
+  INTERRUPTED
+}
+
+enum FocusType {
+  DEEP
+  NORMAL
+  LIGHT
+}
