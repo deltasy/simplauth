@@ -3,10 +3,9 @@ import { z } from "zod"
 
 export function validate(schema: z.ZodType){
     return async (req: Request, res: Response, next: NextFunction) => {
-
-        const result = schema.safeParse(req.body);
+        const result = await schema.safeParseAsync(req.body);
         if(!result.success){
-            return res.send(result.error!.issues);
+            return res.status(400).json(result.error.issues);
         }
         return next();
     }

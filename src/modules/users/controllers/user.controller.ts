@@ -2,8 +2,12 @@ import type { NextFunction, Request, Response } from "express"
 import { createUser, fetchUser, fetchUserRestrict, verifyPassword } from "../services/user.service.js"
 
 export const getData = async (req: Request, res: Response, next: NextFunction) => {
-    const data = await fetchUser({id: req.userId!})
-    return res.status(200).json(data);
+    try {
+        const data = await fetchUser({id: req.userId!});
+        return res.status(200).json(data);
+    } catch (error) {
+        next(error);
+    }
 }
 
 export const viewProfile = async (req: Request, res: Response, next: NextFunction) => {
@@ -30,18 +34,26 @@ export const viewProfile = async (req: Request, res: Response, next: NextFunctio
 
 }
 
-export const signUp = async (req: Request, res: Response) => {
-    const data = await createUser(req.body)
-    return res.status(201).json(data);
+export const signUp = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const data = await createUser(req.body);
+        return res.status(201).json(data);
+    } catch (error) {
+        next(error);
+    }
 }
 
-export const signIn = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+export const signIn = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { email, password } = req.body;
 
-    const data = await verifyPassword(email, password);
-    if(!data){
-        return res.status(403).json({error: "E-mail inválido"})
+        const data = await verifyPassword(email, password);
+        if(!data){
+            return res.status(401).json({error: "Credenciais inválidas"})
+        }
+            
+        return res.status(200).json(data);
+    } catch (error) {
+        next(error);
     }
-        
-    return res.status(200).json(data);
 }
