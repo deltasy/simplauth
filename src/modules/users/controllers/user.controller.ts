@@ -7,7 +7,7 @@ import {
 
 } from "../../../config/env.js";
 
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 export const getData = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -65,7 +65,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
         const { accessToken, refreshToken } = await renewTokens(user.id)
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            path: '/',
+            path: '/user',
             secure: ENV_TYPE === "production",
             sameSite: "strict",
             maxAge: JWT_RTOKEN_EXPIRES_MS
@@ -86,11 +86,13 @@ export const tokenRenewal = async (req: Request, res: Response, next: NextFuncti
 
         const token = req.cookies.refreshToken as string;
         
-        const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret) as jwt.JwtPayload
+        const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret) as JwtPayload
+
         const { accessToken, refreshToken } = await renewTokens(decoded.userId, token)
+
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            path: '/',
+            path: '/user',
             secure: ENV_TYPE === "production",
             sameSite: "strict",
             maxAge: JWT_RTOKEN_EXPIRES_MS
@@ -98,7 +100,9 @@ export const tokenRenewal = async (req: Request, res: Response, next: NextFuncti
 
         return res.status(200).json({token: accessToken})
 
-    }catch(error){
+    }catch(error: any){
+        if(error.message === "CE-1") res.status(403); // Tentativa de reutilização de token
+
         next(error)
     }
 }

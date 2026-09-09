@@ -6,7 +6,7 @@ export const setCookie = async (req: Request, res: Response, next: NextFunction)
 
     res.cookie("refreshToken", cookie, {
         httpOnly: true,
-        path: '/',
+        path: '/user',
         secure: ENV_TYPE === "production",
         sameSite: "strict",
         maxAge: JWT_RTOKEN_EXPIRES_MS

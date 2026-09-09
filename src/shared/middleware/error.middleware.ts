@@ -1,8 +1,10 @@
 import type { NextFunction, Request, Response } from "express"
 import { Prisma } from "@prisma/client";
+import { ENV_TYPE } from "../../config/env.js";
+
+import jwt from "jsonwebtoken"
 
 export const errorHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
-    // Erros neutros que não entregam informações desnecessárias para usuários mal intencionados
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
             return res.status(409).json({ error: "Os dados fornecidos entram em conflito com um registro existente." });
@@ -13,15 +15,16 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
         }
     }
 
-    // Não é uma boa prática deixar hardcodado dessa forma, mas vai ser assim por enquanto
-    if(typeof error == "string"){
-        if(error === "Esse token já foi utilizado"){
-            res.status(403);
-        }
-
-        return res.json({error: error})
+    if(error instanceof jwt.TokenExpiredError){
+        return res.status(401).json({error: "Token inválido ou expirado"})
     }
 
-    console.error("[ERRO INTERNO]:", error);
-    return res.status(500).json({ error: "Erro interno do servidor." });
+    // Erros genéricos não-tratados
+
+    const errorStatus = res.statusCode !== 200 ? res.statusCode : 500
+
+    return res.status(errorStatus).json({ 
+        error: error.cause, 
+        stack: ENV_TYPE === "production" ? "hidden" : error.stack
+    });
 }

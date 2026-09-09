@@ -127,7 +127,7 @@ export async function renewTokens(userId: string, oldRefreshToken: string | null
                 }
             })
 
-            throw new Error("Esse token já foi utilizado");
+            throw new Error("CE-1", { cause: "Esse token já foi utilizado"});
         }
         
         await rtokenDB.update({
