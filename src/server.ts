@@ -31,6 +31,3 @@ app.use(errorHandler)
 app.listen(PORT, () => {
     console.log(`Iniciado na porta ${PORT}!`)
 })
-
-let teste: string = "a"
-teste = 2
