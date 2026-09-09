@@ -110,7 +110,7 @@ export function generateToken(id: string, expiration: string, permission?: Permi
     // Se o usuário for admin, o campo "Permission" surgirá no payload, confirmando que esse usuário é admin
     const payLoad = {
         userId: id,
-        ...(permission && permission === "ADMIN" && { permission })
+        ...(permission && permission === Permission.ADMIN && { permission })
     }
 
     return jwt.sign(

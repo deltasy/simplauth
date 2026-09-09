@@ -15,7 +15,6 @@ export const assertRefreshToken = async (req: Request, res: Response, next: Next
         const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret) as JwtPayload
 
         req.userId = decoded.userId
-        req.permission = decoded.permission
         next()
 
     }catch(error){

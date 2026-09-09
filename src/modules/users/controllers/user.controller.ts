@@ -94,9 +94,15 @@ export const tokenRenewal = async (req: Request, res: Response, next: NextFuncti
     try{
 
         // "userId" e "permission" obtidos pelo assertRefreshToken (middleware de refresh token)
+        const user = await fetchUser({ id: req.userId as string });
+        if (!user) {
+            return res.status(401).json({ error: "Usuário não encontrado ou deletado" });
+
+        }
+        
         const { accessToken, refreshToken } = await renewTokens(
-            req.userId as string, 
-            req.permission, 
+            user.id, 
+            user.permission, 
             req.cookies.refreshToken as string
         )
 
