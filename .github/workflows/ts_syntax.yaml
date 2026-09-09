@@ -5,7 +5,16 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    env:
+      DATABASE_URL: postgresql://dummy:dummy@dummy:5432/db
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      PORT: 3000
+      ENV_TYPE: production
+      JWT_SECRET: secret
+      JWT_ATOKEN_EXPIRES_IN: 1m
+      JWT_RTOKEN_EXPIRES_IN: 7d
+      JWT_RTOKEN_EXPIRES_MS: 604800000
+
     steps:
       - name: Branch checkout
         uses: actions/checkout@v3
