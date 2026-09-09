@@ -6,11 +6,13 @@ import { assertEnvironment } from "./shared/validate/environment.validate.js";
 
 import cookieParser from 'cookie-parser';
 import { debugRouter } from "./modules/debug/debug.router.js";
+import type { Permission } from "@prisma/client";
 
 declare global {
     namespace Express {
         interface Request {
             userId?: string;
+            permission?: Permission;
         }
     }
 }

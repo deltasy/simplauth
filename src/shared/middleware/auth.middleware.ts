@@ -54,6 +54,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
         const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret) as JwtPayload
         req.userId = decoded.userId
+        req.permission = decoded.permission
 
         return next();
     } catch (error) {

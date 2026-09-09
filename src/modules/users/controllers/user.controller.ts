@@ -62,7 +62,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
             return res.status(401).json({error: "Credenciais inválidas"})
         }
 
-        const { accessToken, refreshToken } = await renewTokens(user.id)
+        const { accessToken, refreshToken } = await renewTokens(user.id, user.permission)
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             path: '/user',
@@ -93,11 +93,12 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 export const tokenRenewal = async (req: Request, res: Response, next: NextFunction) => {
     try{
 
-        // userId obtido pelo próprio assertRefreshToken
-        const userId = req.userId as string
-        const token = req.cookies.refreshToken as string;
-
-        const { accessToken, refreshToken } = await renewTokens(userId, token)
+        // "userId" e "permission" obtidos pelo assertRefreshToken (middleware de refresh token)
+        const { accessToken, refreshToken } = await renewTokens(
+            req.userId as string, 
+            req.permission, 
+            req.cookies.refreshToken as string
+        )
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,

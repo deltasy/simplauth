@@ -8,7 +8,7 @@ import {
 import { prisma } from "../../../shared/database/prisma.service.js";
 import type { User } from "../user.schema.js";
 
-import { Prisma } from "@prisma/client";
+import { Prisma, Permission } from "@prisma/client";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
@@ -105,16 +105,23 @@ async function passwordHasher(password: string){
     return await bcrypt.hash(password, salt)
 }
 
-export function generateToken(id: string, expiration: string) {
+export function generateToken(id: string, expiration: string, permission?: Permission ) {
+
+    // Se o usuário for admin, o campo "Permission" surgirá no payload, confirmando que esse usuário é admin
+    const payLoad = {
+        userId: id,
+        ...(permission && permission === "ADMIN" && { permission })
+    }
+
     return jwt.sign(
-        { userId: id }, 
+        payLoad, 
         JWT_SECRET as jwt.Secret, 
         { expiresIn: expiration } as jwt.SignOptions
     );
 }
 
 // Expira a cada 7 dias por padrão
-export async function renewTokens(userId: string, oldRefreshToken: string | null = null){
+export async function renewTokens(userId: string, userPermission?: Permission, oldRefreshToken?: string){
     if(oldRefreshToken){ // Queimar refresh token antigo
 
         // Algum usuário mal intencionado tentou usar um token que já foi revogado
@@ -143,7 +150,7 @@ export async function renewTokens(userId: string, oldRefreshToken: string | null
         await revokeRefreshToken(oldRefreshToken)
     }
 
-    const accessToken = generateToken(userId, JWT_ATOKEN_EXPIRES_IN!)
+    const accessToken = generateToken(userId, JWT_ATOKEN_EXPIRES_IN!, userPermission)
     const refreshToken = generateToken(userId, JWT_RTOKEN_EXPIRES_IN!)
 
     const expirationDate = new Date(Date.now() + JWT_RTOKEN_EXPIRES_MS);
