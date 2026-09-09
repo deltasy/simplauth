@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express"
-import { createUser, fetchUser, fetchUserRestrict, verifyPassword, renewTokens } from "../services/user.service.js"
+import { createUser, fetchUser, fetchUserRestrict, verifyPassword, renewTokens, revokeRefreshToken } from "../services/user.service.js"
 import { 
     JWT_SECRET,
     ENV_TYPE,
@@ -78,17 +78,26 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const token = req.cookies.refreshToken as string;
+        await revokeRefreshToken(token)
+
+        return res.status(200).json({message: "Usuário deslogado"})
+
+    }catch(error){
+        next(error)
+    }
+}
+
 export const tokenRenewal = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        if(!(req.cookies && req.cookies.refreshToken)){
-            return res.status(401).json({error: "Token inválido ou expirado"})
-        }
 
+        // userId obtido pelo próprio assertRefreshToken
+        const userId = req.userId as string
         const token = req.cookies.refreshToken as string;
-        
-        const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret) as JwtPayload
 
-        const { accessToken, refreshToken } = await renewTokens(decoded.userId, token)
+        const { accessToken, refreshToken } = await renewTokens(userId, token)
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,

@@ -7,6 +7,14 @@ import { assertEnvironment } from "./shared/validate/environment.validate.js";
 import cookieParser from 'cookie-parser';
 import { debugRouter } from "./modules/debug/debug.router.js";
 
+declare global {
+    namespace Express {
+        interface Request {
+            userId?: string;
+        }
+    }
+}
+
 const app = express();
 
 assertEnvironment();

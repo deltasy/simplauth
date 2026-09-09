@@ -6,14 +6,6 @@ import {
 
  } from "../../config/env.js";
 
-declare global {
-    namespace Express {
-        interface Request {
-            userId?: string;
-        }
-    }
-}
-
 interface TokenPayload {
     userId: string;
     iat: number;
@@ -62,7 +54,6 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
         const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret) as JwtPayload
         req.userId = decoded.userId
-
 
         return next();
     } catch (error) {

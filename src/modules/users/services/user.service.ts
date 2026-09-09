@@ -1,8 +1,7 @@
-import { assert } from "node:console";
+import type { Request } from "express"
 import { 
     JWT_SECRET,
     JWT_ATOKEN_EXPIRES_IN, JWT_RTOKEN_EXPIRES_IN,
-    ENV_TYPE,
     JWT_RTOKEN_EXPIRES_MS
 } from "../../../config/env.js";
 
@@ -44,6 +43,17 @@ export async function fetchRefreshToken(token: string){
 
 export async function showUsers(){
     return await DB.findMany({})
+}
+
+export async function revokeRefreshToken(token: string){
+    await rtokenDB.update({
+        where: {
+            token: token
+        },
+        data: {
+            revoked: true
+        }
+    })
 }
 
 export async function createRefreshToken(userId: string, expirationTimeMs: number = JWT_RTOKEN_EXPIRES_MS){
@@ -130,14 +140,7 @@ export async function renewTokens(userId: string, oldRefreshToken: string | null
             throw new Error("CE-1", { cause: "Esse token já foi utilizado"});
         }
         
-        await rtokenDB.update({
-            where: {
-                token: oldRefreshToken
-            },
-            data: {
-                revoked: true
-            }
-        })
+        await revokeRefreshToken(oldRefreshToken)
     }
 
     const accessToken = generateToken(userId, JWT_ATOKEN_EXPIRES_IN!)
