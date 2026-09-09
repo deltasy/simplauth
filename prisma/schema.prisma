@@ -19,12 +19,8 @@ model User {
   permission Permission @default(MEMBER)
 
   task Task[]
+  refreshToken RefreshToken[]
 
-}
-
-enum Permission {
-  MEMBER
-  ADMIN
 }
 
 model Task {
@@ -38,6 +34,22 @@ model Task {
   name String
 
   owner User @relation(fields:[owner_id], references: [id])
+}
+
+model RefreshToken {
+  id String @id @default(uuid())
+  owner_id String
+
+  token String @unique
+  expires_at DateTime
+  revoked Boolean @default(false)
+
+  owner User @relation(fields:[owner_id], references: [id])
+}
+
+enum Permission {
+  MEMBER
+  ADMIN
 }
 
 enum State {

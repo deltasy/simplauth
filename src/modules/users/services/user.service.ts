@@ -1,4 +1,11 @@
-import { JWT_EXPIRES_IN, JWT_SECRET } from "../../../config/env.js";
+import { assert } from "node:console";
+import { 
+    JWT_SECRET,
+    JWT_ATOKEN_EXPIRES_IN, JWT_RTOKEN_EXPIRES_IN,
+    ENV_TYPE,
+    JWT_RTOKEN_EXPIRES_MS
+} from "../../../config/env.js";
+
 import { prisma } from "../../../shared/database/prisma.service.js";
 import type { User } from "../user.schema.js";
 
@@ -7,6 +14,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
 const DB = prisma.user
+const rtokenDB = prisma.refreshToken
 
 export async function fetchUser(whereArg: Prisma.UserWhereUniqueInput) {
     return await DB.findUnique({
@@ -26,8 +34,31 @@ export async function fetchUserRestrict(whereArg: Prisma.UserWhereUniqueInput) {
     });
 }
 
+export async function fetchRefreshToken(token: string){
+    return await rtokenDB.findUniqueOrThrow({
+        where: {
+            token: token
+        }
+    })
+}
+
 export async function showUsers(){
     return await DB.findMany({})
+}
+
+export async function createRefreshToken(userId: string, expirationTimeMs: number = JWT_RTOKEN_EXPIRES_MS){
+    const expirationDate = new Date(Date.now() + expirationTimeMs);
+
+    const newToken = generateToken(userId, JWT_RTOKEN_EXPIRES_IN!)
+    await rtokenDB.create({
+        data: {
+            owner_id: userId,
+            token: newToken,
+            expires_at: expirationDate
+        }
+    })
+
+    return { newToken, expirationTimeMs }
 }
 
 export async function createUser(user: User){
@@ -40,26 +71,23 @@ export async function createUser(user: User){
             passwordHash: await passwordHasher(password),
         }
     })
-    return [newUser.id, generateToken(newUser.id)]
+    return [newUser.id, generateToken(newUser.id, JWT_ATOKEN_EXPIRES_IN!)]
 }
 
 export async function verifyPassword(email: string, password: string) {
     const user = await fetchUser({email: email});
+
     if(!user){
         return false;
     }
 
     const correctPassword = await bcrypt.compare(password, user.passwordHash)
-
     if(!correctPassword){
         return false;
     }
 
     const { passwordHash, ...safeUser} = user;
-    return { 
-        user: safeUser, 
-        token: generateToken(user.id)
-    };
+    return safeUser;
 }
 
 async function passwordHasher(password: string){
@@ -67,10 +95,64 @@ async function passwordHasher(password: string){
     return await bcrypt.hash(password, salt)
 }
 
-function generateToken(id: string) {
+export function generateToken(id: string, expiration: string) {
     return jwt.sign(
         { userId: id }, 
         JWT_SECRET as jwt.Secret, 
-        { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
+        { expiresIn: expiration } as jwt.SignOptions
     );
+}
+
+// Expira a cada 7 dias por padrão
+export async function renewTokens(userId: string, oldRefreshToken: string | null = null){
+    if(oldRefreshToken){ // Queimar refresh token antigo
+
+        // Algum usuário mal intencionado tentou usar um token que já foi revogado
+        const reusingToken = await rtokenDB.findFirst({
+            where: {
+                token: oldRefreshToken,
+                revoked: true
+            }
+        })
+
+        if(reusingToken){
+
+            // Desconectar todas as sessões desses usuários
+            await rtokenDB.updateMany({
+                where: {
+                    owner_id: userId
+                },
+                data: {
+                    revoked: true
+                }
+            })
+
+            throw new Error("Esse token já foi utilizado");
+        }
+        
+        await rtokenDB.update({
+            where: {
+                token: oldRefreshToken
+            },
+            data: {
+                revoked: true
+            }
+        })
+    }
+
+    const accessToken = generateToken(userId, JWT_ATOKEN_EXPIRES_IN!)
+    const refreshToken = generateToken(userId, JWT_RTOKEN_EXPIRES_IN!)
+
+    const expirationDate = new Date(Date.now() + JWT_RTOKEN_EXPIRES_MS);
+
+    await rtokenDB.create({
+        data: {
+            owner_id: userId,
+            token: refreshToken,
+            expires_at: expirationDate
+        }
+    })
+
+    // Retornar parâmetros que criarão o cookie
+    return { accessToken, refreshToken }
 }

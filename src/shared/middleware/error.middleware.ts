@@ -13,6 +13,15 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
         }
     }
 
+    // Não é uma boa prática deixar hardcodado dessa forma, mas vai ser assim por enquanto
+    if(typeof error == "string"){
+        if(error === "Esse token já foi utilizado"){
+            res.status(403);
+        }
+
+        return res.json({error: error})
+    }
+
     console.error("[ERRO INTERNO]:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });
 }

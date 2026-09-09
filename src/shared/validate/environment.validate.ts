@@ -1,15 +1,29 @@
 import z from "zod";
-import { DATABASE_URL, PORT, JWT_SECRET, JWT_EXPIRES_IN } from "../../config/env.js";
-import type { Request, Response, NextFunction } from "express";
+import { 
+    ENV_TYPE,
+    DATABASE_URL, PORT, 
+    JWT_SECRET, 
+    JWT_ATOKEN_EXPIRES_IN, JWT_RTOKEN_EXPIRES_IN, JWT_RTOKEN_EXPIRES_MS
+} from "../../config/env.js";
 
 const envReady = z.object({
-    PORT: z.string(), DATABASE_URL: z.string(), JWT_SECRET: z.string(), JWT_EXPIRES_IN: z.string()
+    ENV_TYPE: z.string(),
+    PORT: z.string(), DATABASE_URL: z.string(), 
+    JWT_SECRET: z.string(), 
+    JWT_ATOKEN_EXPIRES_IN: z.string(),
+    JWT_RTOKEN_EXPIRES_IN: z.string(),
+    JWT_RTOKEN_EXPIRES_MS: z.number()
 })
 
 export const assertEnvironment = () => {
     try{
         envReady.parse({
-            DATABASE_URL: DATABASE_URL, PORT: PORT, JWT_SECRET: JWT_SECRET, JWT_EXPIRES_IN: JWT_EXPIRES_IN
+            ENV_TYPE: ENV_TYPE,
+            DATABASE_URL: DATABASE_URL, PORT: PORT, JWT_SECRET: 
+            JWT_SECRET, 
+            JWT_ATOKEN_EXPIRES_IN: JWT_ATOKEN_EXPIRES_IN,
+            JWT_RTOKEN_EXPIRES_IN: JWT_RTOKEN_EXPIRES_IN,
+            JWT_RTOKEN_EXPIRES_MS: JWT_RTOKEN_EXPIRES_MS
         });
 
     }catch(error){
