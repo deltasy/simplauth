@@ -3,7 +3,8 @@ name: Type Checking
 on: [push, pull_request]
 
 jobs:
-  build:
+  docker-build:
+    name: Docker build
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: postgresql://dummy:dummy@dummy:5432/db
