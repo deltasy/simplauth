@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "tsx ./src/server.ts",
     "dev": "tsx watch ./src/server.ts",
     "build": "npm install typescript tsx @types/node --save-dev & npx tsc --init & npm install prisma@7.10.0 @types/pg --save-dev & npm install @prisma/client@7.10.0 @prisma/adapter-pg pg dotenv",
     "test": "echo \"Error: no test specified\" && exit 1"

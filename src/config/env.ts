@@ -1,6 +1,7 @@
 import { config } from "dotenv"
 
-config({path: `.env`})
+// pegará o .env mais próximo
+config();
 
 export const {
     ENV_TYPE,

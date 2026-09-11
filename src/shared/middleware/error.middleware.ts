@@ -15,7 +15,7 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
         }
     }
 
-    if(error instanceof jwt.TokenExpiredError){
+    if(error instanceof jwt.TokenExpiredError || error instanceof jwt.JsonWebTokenError){
         return res.status(401).json({error: "Token inválido ou expirado"})
     }
 
