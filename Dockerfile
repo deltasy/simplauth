@@ -8,4 +8,6 @@ RUN npm install
 COPY . .
 RUN npx prisma generate
 
+RUN npx tsc --noEmit
+
 CMD ["npm", "start"]
