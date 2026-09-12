@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "dotenv -e .env.test -- prisma db push --accept-data-loss && dotenv -e .env.test -- vitest",
     "start": "tsx ./src/server.ts",
     "dev": "tsx watch ./src/server.ts",
-    "build": "npm install typescript tsx @types/node --save-dev & npx tsc --init & npm install prisma@7.10.0 @types/pg --save-dev & npm install @prisma/client@7.10.0 @prisma/adapter-pg pg dotenv",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm install typescript tsx @types/node --save-dev & npx tsc --init & npm install prisma@7.10.0 @types/pg --save-dev & npm install @prisma/client@7.10.0 @prisma/adapter-pg pg dotenv"
   },
   "keywords": [],
   "author": "",
@@ -20,9 +20,13 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.4.1",
     "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
+    "dotenv-cli": "^11.0.0",
     "prisma": "^7.10.0",
+    "supertest": "^7.2.2",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

@@ -11,6 +11,7 @@ import type { User } from "../user.schema.js";
 import { Prisma, Permission } from "@prisma/client";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { randomUUID } from "node:crypto";
 
 const DB = prisma.user
 const rtokenDB = prisma.refreshToken
@@ -100,17 +101,20 @@ export async function verifyPassword(email: string, password: string) {
     return safeUser;
 }
 
-async function passwordHasher(password: string){
+export async function passwordHasher(password: string){
     const salt = await bcrypt.genSalt(10);
     return await bcrypt.hash(password, salt)
 }
 
-export function generateToken(id: string, expiration: string, permission?: Permission ) {
-
-    // Se o usuário for admin, o campo "Permission" surgirá no payload, confirmando que esse usuário é admin
+export function generateToken(id: string, expiration: string, permission?: Permission, jti?: string) {
     const payLoad = {
         userId: id,
-        ...(permission && permission === Permission.ADMIN && { permission })
+
+        // Permissão, opcional (aplicado apenas se o usuário for ADMIN)
+        ...(permission === Permission.ADMIN && { permission }),
+
+        // JTI, opcional (aplicado apenas para refresh tokens, para garantir uma assinatura única)
+        ...(jti && { jti }),
     }
 
     return jwt.sign(
@@ -151,7 +155,7 @@ export async function renewTokens(userId: string, userPermission?: Permission, o
     }
 
     const accessToken = generateToken(userId, JWT_ATOKEN_EXPIRES_IN!, userPermission)
-    const refreshToken = generateToken(userId, JWT_RTOKEN_EXPIRES_IN!)
+    const refreshToken = generateToken(userId, JWT_RTOKEN_EXPIRES_IN!, userPermission, randomUUID())
 
     const expirationDate = new Date(Date.now() + JWT_RTOKEN_EXPIRES_MS);
 

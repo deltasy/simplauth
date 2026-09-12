@@ -5,7 +5,7 @@ import { errorHandler } from "./shared/middleware/error.middleware.js";
 import { assertEnvironment } from "./shared/validate/environment.validate.js";
 
 import cookieParser from 'cookie-parser';
-import { debugRouter } from "./modules/debug/debug.router.js";
+import { debugRouter } from "./modules/debug/debug.routes.js";
 import type { Permission } from "@prisma/client";
 
 declare global {
@@ -17,7 +17,7 @@ declare global {
     }
 }
 
-const app = express();
+export const app = express();
 
 assertEnvironment();
 
@@ -31,3 +31,5 @@ app.use(errorHandler)
 app.listen(PORT, () => {
     console.log(`Iniciado na porta ${PORT}!`)
 })
+
+export default app;
