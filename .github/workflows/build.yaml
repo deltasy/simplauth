@@ -1,4 +1,4 @@
-name: Pipeline de Testes Integrados
+name: Tests Pipeline
 
 on:
   push:
@@ -33,13 +33,13 @@ jobs:
         with:
           cache: 'npm'
           
-      - name: Instalando dependências
+      - name: Install requirements
         run: npm ci
 
-      - name: Satisfação do Compilador (Prisma Generate)
+      - name: Prisma start
         run: npx prisma generate
         
-      - name: Executando Testes Unitários
+      - name: Test
         run: npm run test:unit
 
   integration-tests:
@@ -71,11 +71,11 @@ jobs:
         with:
           cache: 'npm'
           
-      - name: Requirements install
+      - name: Install requirements
         run: npm ci
         
-      - name: Prisma generate
+      - name: Prisma start
         run: npx prisma generate
         
-      - name: Integration tests
+      - name: Test
         run: npm run test:integration:ci
