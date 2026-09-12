@@ -10,6 +10,9 @@ export default defineConfig({
         // Injetado em CADA arquivo de teste
         setupFiles: ['./src/shared/__tests__/worker.setup.ts'],
 
-        reporters: ['verbose']
+        reporters: ['verbose'],
+        env: {
+            JWT_SECRET: "dummy"
+        }
     },
 });

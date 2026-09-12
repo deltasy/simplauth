@@ -9,6 +9,5 @@ COPY . .
 RUN npx prisma generate
 
 RUN npx tsc --noEmit
-RUN npm run test
 
 CMD ["npm", "start"]
