@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "github-test": "dotenv -e .env.production.local -- prisma db push --accept-data-loss && dotenv -e .env.production.local -- vitest",
+    "github-test": "vitest --run",
     "test": "dotenv -e .env.test -- prisma db push --accept-data-loss && dotenv -e .env.test -- vitest",
     "start": "tsx ./src/server.ts",
     "dev": "tsx watch ./src/server.ts",
