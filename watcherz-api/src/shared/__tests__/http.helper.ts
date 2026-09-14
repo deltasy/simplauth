@@ -1,7 +1,5 @@
 import type { Response } from "supertest"
 
-export const signInRoute = "/user/sign-in"
-
 export function extractCookieValue(cookie: string | undefined, cookieName: string): string | null {
     if (!cookie || !Array.isArray(cookie)) return null;
 

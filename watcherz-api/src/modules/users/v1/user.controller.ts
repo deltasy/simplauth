@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express"
-import { createUser, fetchUser, verifyPassword, renewTokens, revokeRefreshToken, fetchUserFull, fetchMyUser } from "../services/user.service.js"
+import { createUser, fetchUser, verifyPassword, renewTokens, revokeRefreshToken, fetchUserFull, fetchMyUser } from "../user.service.js"
 import {
     ENV_TYPE,
     JWT_RTOKEN_EXPIRES_MS
@@ -63,7 +63,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
         const { accessToken, refreshToken } = await renewTokens(user.id, user.permission)
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            path: '/user',
+            path: req.baseUrl,
             secure: ENV_TYPE === "production",
             sameSite: "strict",
             maxAge: JWT_RTOKEN_EXPIRES_MS
@@ -82,7 +82,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
         await revokeRefreshToken(token)
         res.cookie("refreshToken", '', {
             httpOnly: true,
-            path: '/user',
+            path: req.baseUrl,
             secure: ENV_TYPE === "production",
             sameSite: "strict",
             expires: new Date(0)
@@ -113,7 +113,7 @@ export const tokenRenewal = async (req: Request, res: Response, next: NextFuncti
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            path: '/user',
+            path: req.baseUrl,
             secure: ENV_TYPE === "production",
             sameSite: "strict",
             maxAge: JWT_RTOKEN_EXPIRES_MS

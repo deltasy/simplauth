@@ -1,16 +1,16 @@
 import request from "supertest"
 
-import { extractTokens, signInRoute } from "../../../shared/__tests__/http.helper.js"
+import { extractTokens } from "../../../shared/__tests__/http.helper.js"
 
-import { test, expect, describe, beforeAll } from "vitest"
+import { test, expect, describe } from "vitest"
 
-import app from "../../../server.js"
+import app, { routeData } from "../../../server.js"
 
-const route = "/debug"
-
+const debugRoute = routeData.debugUrl
+const signInRoute = routeData.signInRoute
 
 describe("Pipeline: Debug", () => {
-    const pipelineRoute = route + "/set_cookie";
+    const pipelineRoute = debugRoute + "/set_cookie";
     const newValue = "teste"
 
     test("Set-cookie bem-sucedido (ADMIN)", async () => {

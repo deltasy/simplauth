@@ -1,5 +1,5 @@
 import { test, expect } from "vitest"
-import { generateToken } from "../src/modules/users/services/user.service.js"
+import { generateToken } from "../src/modules/users/user.service.js"
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../src/config/env.js"
 import { Permission } from "@prisma/client"

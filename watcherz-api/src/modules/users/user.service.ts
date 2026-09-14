@@ -3,10 +3,10 @@ import {
     JWT_SECRET,
     JWT_ATOKEN_EXPIRES_IN, JWT_RTOKEN_EXPIRES_IN,
     JWT_RTOKEN_EXPIRES_MS
-} from "../../../config/env.js";
+} from "../../config/env.js";
 
-import { prisma } from "../../../shared/database/prisma.service.js";
-import type { User } from "../user.schema.js";
+import { prisma } from "../../shared/database/prisma.service.js";
+import type { User } from "./user.schema.js";
 
 import { Prisma, Permission } from "@prisma/client";
 import bcrypt from "bcrypt"

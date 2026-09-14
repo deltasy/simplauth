@@ -1,26 +1,25 @@
 import request from "supertest"
 import { test, expect, describe, beforeAll } from "vitest"
 
-import { app } from "../../../server.js"
+import { app, routeData } from "../../../server.js"
 import { JWT_SECRET } from "../../../config/env.js"
 
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import { Permission } from "@prisma/client"
 
-import { extractCookieValue, extractTokens, signInRoute } from "../../../shared/__tests__/http.helper.js"
+import { extractCookieValue, extractTokens } from "../../../shared/__tests__/http.helper.js"
 import { createTestUser } from "../../../shared/__tests__/prisma.helper.js"
 import { randomUUID } from "node:crypto"
 
-const route = "/user"
-const refreshRoute = route + "/refresh"
+const usersRoute = routeData.usersUrl
+const refreshRoute = usersRoute + "/refresh"
+const signInRoute = routeData.signInRoute
 
 const memberUser = await createTestUser();
 const adminUser = await createTestUser(Permission.ADMIN);
 
-
-
 describe("Pipeline: Registro", () => {
-    const pipelineRoute = route + "/sign-up"
+    const pipelineRoute = usersRoute + "/sign-up"
 
     test("Requisição inválida (E-mail mal formatado)", async () => {
         const response = await request(app)
@@ -81,7 +80,7 @@ describe("Pipeline: Registro", () => {
 })
 
 describe("Pipeline: Login", () => {
-    const pipelineRoute = route + "/sign-in"
+    const pipelineRoute = usersRoute + "/sign-in"
 
     test("Login OK", async () => {
         const response = await request(app)
@@ -204,7 +203,7 @@ describe("Pipeline: Refresh", () => {
 });
 
 describe("Pipeline: Logout", () => {
-    const pipelineRoute = route + "/logout"
+    const pipelineRoute = usersRoute + "/logout"
 
     test("Logout bem-sucedido", async () => {
         const loginResponse = await request(app)
@@ -257,7 +256,7 @@ describe("Pipeline: Logout", () => {
 
 
 describe("Pipeline: Dados do usuário atual (this)", () => {
-    const pipelineRoute = route + "/this"
+    const pipelineRoute = usersRoute + "/this"
 
     test("Usuário logado", async () => {
         const loginResponse = await request(app)
@@ -300,7 +299,7 @@ describe("Pipeline: Dados do usuário atual (this)", () => {
 
 //  /:profile_name
 describe("Pipeline: Perfil público", () => {
-    const pipelineRoute = route + "/"
+    const pipelineRoute = usersRoute + "/"
 
     test("Usuário visita perfil inexistente", async () => {
         const profile = "UNKNOWN"

@@ -1,5 +1,5 @@
 import { Permission } from "@prisma/client";
-import { passwordHasher } from "../../modules/users/services/user.service.js";
+import { passwordHasher } from "../../modules/users/user.service.js";
 import { prisma } from "../database/prisma.service.js";
 
 export default async function () {
