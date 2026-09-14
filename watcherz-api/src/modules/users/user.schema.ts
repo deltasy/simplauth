@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { registry } from "../../config/openapi.js"
 
 export const userSchema = z.object({
     email: z.string().includes("@").endsWith(".com"),

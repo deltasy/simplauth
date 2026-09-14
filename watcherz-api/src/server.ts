@@ -11,7 +11,12 @@ import type { Request, Response } from "express"
 import cors from "cors"
 import cookieParser from 'cookie-parser';
 
+import { apiReference } from "@scalar/express-api-reference";
+import { scalarConfig } from "../scalar.config.js";
+
 import type { Permission } from "@prisma/client";
+import { generateOpenApiDocument } from "./config/openapi.js";
+
 
 declare global {
     namespace Express {
@@ -33,11 +38,22 @@ app.use(cors({
 }))
 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
+
 
 // Versionamento de API
 export const routeData = routesMetadata;
 app.use(routerV1);
+
+app.use(`${routeData.baseUrl}/docs`,
+    apiReference({
+        ...scalarConfig,
+        spec: {
+            content: generateOpenApiDocument(routeData.baseUrl),
+        }
+    })
+);
+
 
 app.get("/", (req: Request, res: Response) => {
     return res.json({ message: "OK" })

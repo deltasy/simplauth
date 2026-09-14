@@ -5,13 +5,11 @@
   "main": "index.js",
   "scripts": {
     "actions": "git add . && git commit --amend --no-edit && git push origin --force-with-lease",
-    
     "test:unit": "vitest run --dir tests --config ./vitest.unit.config.ts",
     "test:integration:local": "dotenv -e .env.test -- prisma db push --accept-data-loss && dotenv -e .env.test -- vitest run --dir src/modules --config ./vitest.integration.config.ts",
     "test:integration:ci": "prisma db push --accept-data-loss && vitest run --dir src/modules --config ./vitest.integration.config.ts",
-
     "start": "tsx ./src/server.ts",
-    "dev": "tsx watch ./src/server.ts",
+    "dev": "tsx watch ./src/server.ts --watch ./src",
     "build": "npm install typescript tsx @types/node --save-dev & npx tsc --init & npm install prisma@7.10.0 @types/pg --save-dev & npm install @prisma/client@7.10.0 @prisma/adapter-pg pg dotenv"
   },
   "keywords": [],
@@ -27,6 +25,7 @@
     "@types/node": "^26.4.1",
     "@types/pg": "^8.23.1",
     "@types/supertest": "^7.2.1",
+    "@types/swagger-jsdoc": "^6.0.4",
     "dotenv-cli": "^11.0.0",
     "prisma": "^7.10.0",
     "supertest": "^7.2.2",
@@ -35,8 +34,10 @@
     "vitest": "^5.0.0"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^9.1.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "@scalar/express-api-reference": "^0.10.18",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -44,6 +45,7 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.0",
-    "zod": "^4.5.4"
+    "swagger-jsdoc": "^6.3.0",
+    "zod": "^4.6.5"
   }
 }
