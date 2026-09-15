@@ -1,8 +1,12 @@
 import { test, expect } from "vitest"
-import { generateToken } from "../src/modules/users/user.service.js"
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../src/config/env.js"
+
 import { Permission } from "@prisma/client"
+
+import { generateToken } from "../src/modules/auth/auth.service.js"
+
+
 
 test("Geração de token de MEMBRO", () => {
     const token = generateToken("UUID-123456", "7d")

@@ -2,6 +2,9 @@ import { z } from "zod";
 import { extendZodWithOpenApi, OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { PORT } from "./env.js";
 
+import registerUserDocs from "../modules/users/v1/user.docs.js";
+import registerAuthDocs from "../modules/auth/v1/auth.docs.js";
+import registerDebugDocs from "../modules/debug/v1/debug.docs.js";
 
 extendZodWithOpenApi(z);
 export const registry = new OpenAPIRegistry();
@@ -18,6 +21,10 @@ registry.registerComponent("securitySchemes", "cookieAuth", {
 });
 
 export function generateOpenApiDocument(baseUrl: string) {
+    registerUserDocs();
+    registerAuthDocs();
+    registerDebugDocs();
+
     const generator = new OpenApiGeneratorV3(registry.definitions);
 
     return generator.generateDocument({

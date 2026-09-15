@@ -1,22 +1,33 @@
 import express from "express"
-import { getData, tokenRenewal, signIn, signUp, viewProfile, logout } from "./user.controller.js";
 
+import { auth, optionalAuth } from "../../../shared/middlewares/auth.middleware.js";
+import { editUserData, getUserData, viewProfile } from "./user.controller.js";
 
-import { userSchema } from "../user.schema.js";
 import { validate } from "../../../shared/validate/generic.validate.js";
+import { editProfileSchema } from "../user.schema.js";
 
-import { auth, checkProfileOwnership } from "../../../shared/middleware/auth.middleware.js";
-import { assertRefreshToken } from "./middlewares/refreshToken.controller.js";
+import { routesMetadataV1 } from "../../../shared/routes/v1.metadata.js";
 
-export const userRouterV1 = express.Router();
+const { myUserRoute, userProfileRoute, userEditRoute } = routesMetadataV1;
 
-userRouterV1.post('/sign-up', validate(userSchema), signUp)
-userRouterV1.post('/sign-in', validate(userSchema), signIn)
+const userRouterV1 = express.Router();
 
 
-userRouterV1.get('/refresh', assertRefreshToken, tokenRenewal)
+userRouterV1.get(
+    myUserRoute.relative,
+    auth,
+    getUserData
+);
+userRouterV1.get(
+    `${userProfileRoute.relative}:profile_name`,
+    optionalAuth, 
+    viewProfile
+);
 
-userRouterV1.post('/logout', auth, assertRefreshToken, logout)
-userRouterV1.get('/this', auth, getData)
+userRouterV1.put(
+    userEditRoute.relative,
+    auth, validate(editProfileSchema),
+    editUserData
+);
 
-userRouterV1.get('/:profile_name', checkProfileOwnership, viewProfile)
+export default userRouterV1;

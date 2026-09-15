@@ -1,21 +1,18 @@
+import { test, expect, describe } from "vitest"
 import request from "supertest"
 
 import { extractTokens } from "../../../shared/__tests__/http.helper.js"
+import app from "../../../server.js"
+import { routesMetadataV1 } from "../../../shared/routes/v1.metadata.js";
 
-import { test, expect, describe } from "vitest"
-
-import app, { routeData } from "../../../server.js"
-
-const debugRoute = routeData.debugUrl
-const signInRoute = routeData.signInRoute
+const { signInRoute, setCookieRoute } = routesMetadataV1;
 
 describe("Pipeline: Debug", () => {
-    const pipelineRoute = debugRoute + "/set_cookie";
     const newValue = "teste"
 
     test("Set-cookie bem-sucedido (ADMIN)", async () => {
         // Login
-        const loginResponse = await request(app).post(signInRoute).send({
+        const loginResponse = await request(app).post(signInRoute.raw).send({
             "email": "admin@gmail.com",
             "password": "12345"
         });
@@ -24,7 +21,7 @@ describe("Pipeline: Debug", () => {
         const { accessToken, refreshToken } = extractTokens(loginResponse);
 
         const validDebugResponse = await request(app)
-            .post(pipelineRoute)
+            .post(setCookieRoute.raw)
             .send({
                 "cookie": newValue
             })
@@ -37,7 +34,7 @@ describe("Pipeline: Debug", () => {
 
     test("Set-cookie não autorizado", async () => {
         // Login
-        const loginResponse = await request(app).post(signInRoute).send({
+        const loginResponse = await request(app).post(signInRoute.raw).send({
             "email": "member@gmail.com",
             "password": "12345"
         });
@@ -46,7 +43,7 @@ describe("Pipeline: Debug", () => {
         const { accessToken, refreshToken } = extractTokens(loginResponse);
 
         const invalidDebugResponse = await request(app)
-            .post(pipelineRoute)
+            .post(setCookieRoute.raw)
             .send({
                 "cookie": newValue
             })

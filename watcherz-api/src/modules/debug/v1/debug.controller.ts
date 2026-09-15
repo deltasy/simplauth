@@ -1,13 +1,15 @@
 import type { NextFunction, Request, Response } from "express"
 import { ENV_TYPE, JWT_RTOKEN_EXPIRES_MS } from "../../../config/env.js"
 
+import { routesMetadataV1 } from "../../../shared/routes/v1.metadata.js";
+
 export const setCookie = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const { cookie } = req.body;
 
         res.cookie("refreshToken", cookie, {
             httpOnly: true,
-            path: req.baseUrl,
+            path: routesMetadataV1.baseUrl,
             secure: ENV_TYPE === "production",
             sameSite: "strict",
             maxAge: JWT_RTOKEN_EXPIRES_MS

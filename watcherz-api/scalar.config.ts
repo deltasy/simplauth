@@ -1,10 +1,7 @@
-import { apiReference } from "@scalar/express-api-reference";
-import { generateOpenApiDocument } from "./src/config/openapi.js";
-import app, { routeData } from "./src/server.js";
-
 export const scalarConfig = {
     theme: 'default' as const,
     layout: 'modern' as const,
+    defaultOpenAllTags: true,
     forceDarkModeState: 'dark' as const,
     hideDarkModeToggle: true,
     hideSearch: true,          
@@ -20,13 +17,20 @@ export const scalarConfig = {
         .scalar-app [class*="ask-ai"],
         .scalar-app [class*="generate-mcp"],
         .scalar-app .scalar-sidebar-footer,
-        .scalar-app border-sidebar-border,
-        .scalar-app darklight-reference,
         .scalar-app .scalar-reference-intro-clients,
+        .scalar-app .property-required,
+        .scalar-app .open-api-client-button,
+        .scalar-app .darklight-reference,
+        .scalar-app .agent-button-container,
+        .scalar-app .download-button,
+        .scalar-app .property-detail,
         .scalar-app .sidebar-header button:not([aria-label="Toggle dark mode"]) {
             display: none !important;
             pointer-events: none !important;
             opacity: 0 !important;
+        }
+        .scalar-app .section-header-wrapper {
+            margin-top: 10px !important;
         }
         
     ` 

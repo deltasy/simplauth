@@ -1,9 +1,7 @@
 import express from "express"
 import { PORT } from "./config/env.js";
 
-import { routerV1, routesMetadata } from "./shared/routes/v1.js";
-
-import { errorHandler } from "./shared/middleware/error.middleware.js";
+import { errorHandler } from "./shared/middlewares/error.middleware.js";
 import { assertEnvironment } from "./shared/validate/environment.validate.js";
 
 import type { Request, Response } from "express"
@@ -17,6 +15,7 @@ import { scalarConfig } from "../scalar.config.js";
 import type { Permission } from "@prisma/client";
 import { generateOpenApiDocument } from "./config/openapi.js";
 
+import versionV1 from "./shared/routes/v1.js";
 
 declare global {
     namespace Express {
@@ -40,20 +39,17 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
 // Versionamento de API
-export const routeData = routesMetadata;
-app.use(routerV1);
+app.use(versionV1.metadata.baseUrl, versionV1.router);
 
-app.use(`${routeData.baseUrl}/docs`,
+app.use(`${versionV1.metadata.baseUrl}/docs`,
     apiReference({
         ...scalarConfig,
         spec: {
-            content: generateOpenApiDocument(routeData.baseUrl),
+            content: generateOpenApiDocument(versionV1.metadata.baseUrl),
         }
     })
 );
-
 
 app.get("/", (req: Request, res: Response) => {
     return res.json({ message: "OK" })

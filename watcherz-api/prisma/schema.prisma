@@ -18,22 +18,9 @@ model User {
 
   permission Permission @default(MEMBER)
 
-  task Task[]
+  is_deleted Boolean @default(false)
+
   refreshToken RefreshToken[]
-
-}
-
-model Task {
-  id Int @id @default(autoincrement())
-  owner_id String
-
-  createdAt DateTime @default(now())
-  state State
-  focusLevel FocusType?
-
-  name String
-
-  owner User @relation(fields:[owner_id], references: [id])
 }
 
 model RefreshToken {
