@@ -1,7 +1,9 @@
 import z from "zod";
 import { registry } from "../../../config/openapi.js";
 import { refreshTokenCookie } from "../../auth/auth.schema.js";
+
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+
 import { restoreUserSchema } from "../admin.schema.js";
 
 export default function registerAdminDocs() {

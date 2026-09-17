@@ -4,7 +4,9 @@ import { AuthService } from "../../auth/auth.service.js";
 import { ENV_TYPE } from "../../../config/env.js";
 import { UserService } from "../user.service.js";
 
+
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+
 import type { User } from "@prisma/client";
 
 export const UserController = {

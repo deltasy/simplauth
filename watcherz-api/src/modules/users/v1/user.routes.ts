@@ -6,7 +6,9 @@ import { UserController } from "./user.controller.js";
 import { validate } from "../../../shared/validate/generic.validate.js";
 import { editProfileSchema } from "../user.schema.js";
 
+
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+
 import { assertRefreshToken } from "../../auth/middlewares/refreshToken.middleware.js";
 
 const { myUserRoute, userProfileRoute, userEditRoute, userDeleteRoute } = routesMetadataV1;

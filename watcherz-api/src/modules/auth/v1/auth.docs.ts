@@ -1,6 +1,8 @@
 import { registry } from "../../../config/openapi.js";
 import { refreshTokenCookie, signRequestSchema, signUpResponseSchema, tokenResponseSchema } from "../auth.schema.js";
+
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+
 
 export default function registerAuthDocs() {
     const { signUpRoute, signInRoute, logoutRoute, refreshRoute } = routesMetadataV1;

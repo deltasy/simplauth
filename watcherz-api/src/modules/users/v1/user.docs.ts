@@ -2,7 +2,9 @@ import { registry } from "../../../config/openapi.js";
 import { z } from "zod";
 
 import { signUpResponseSchema } from "../../auth/auth.schema.js";
+
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+
 import { deletionConfirmSchema, editProfileSchema, selfProfileSchema } from "../user.schema.js";
 
 export default function registerUserDocs() {

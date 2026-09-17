@@ -6,7 +6,6 @@ import app from "../../../server.js"
 import { extractTokens } from "../../../shared/__tests__/http.helper.js"
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
 
-
 const { signInRoute, setCookieRoute, userDeleteRoute, userRestoreRoute } = routesMetadataV1;
 
 import { adminUser, createTestUser, memberUser } from "../../../shared/__tests__/prisma.helper.js";
