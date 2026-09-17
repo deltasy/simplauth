@@ -12,10 +12,10 @@ import { adminUser, createTestUser, memberUser } from "../../../shared/__tests__
 import { signCatch } from "../../auth/__tests__/auth.routes.spec.js";
 
 
-describe("Pipeline: Set cookie", () => {
+describe("Pipeline: /set_cookie", () => {
     const newValue = "teste"
 
-    test("Cookie setado", async () => {
+    test("OK", async () => {
         // Login
         const loginResponse = await request(app).post(signInRoute.raw).send(adminUser);
         expect(loginResponse.status).toBe(200)
@@ -26,12 +26,12 @@ describe("Pipeline: Set cookie", () => {
             .post(setCookieRoute.raw)
             .send({
                 "cookie": newValue
-            })
-            .set('Cookie', `refreshToken=${refreshToken}`)
-            .set('Authorization', `Bearer ${accessToken}`);
+            }).withAuth(accessToken, refreshToken);
 
-        expect(validAdminResponse.status).toBe(200)
-        expect(extractTokens(validAdminResponse)["refreshToken"]).toBe(newValue)
+        expect(validAdminResponse.status).toBe(200);
+
+        const { refreshToken: newRefreshToken} = extractTokens(validAdminResponse);
+        expect(newRefreshToken).toBe(newValue);
     });
 
     test("Permissões insuficientes", async () => {
@@ -45,17 +45,14 @@ describe("Pipeline: Set cookie", () => {
             .post(setCookieRoute.raw)
             .send({
                 "cookie": newValue
-            })
-            .set('Cookie', `refreshToken=${refreshToken}`)
-            .set('Authorization', `Bearer ${accessToken}`);
+            }).withAuth(accessToken, refreshToken);
 
         expect(invalidAdminResponse.status).toBe(403);
     });
 });
 
-describe("Pipeline: Restaurar usuário", () => {
-    test("Usuário restaurado", async () => {
-
+describe("Pipeline: /user_restore", () => {
+    test("OK", async () => {
         // Deletar
         const deletedUser = await createTestUser();
         const { accessToken: aTokenMember, refreshToken: rTokenMember }

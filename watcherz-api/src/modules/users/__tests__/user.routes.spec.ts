@@ -13,9 +13,9 @@ import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.j
 const { myUserRoute, userProfileRoute, userEditRoute, userDeleteRoute } = routesMetadataV1;
 
 
-describe("Pipeline: Dados do usuário atual", () => {
-    test("Usuário logado", async () => {
-        const { accessToken, refreshToken } = await signCatch("sign-in", memberUser);
+describe("Pipeline: /me", () => {
+    test("OK", async () => {
+        const { accessToken } = await signCatch("sign-in", memberUser);
 
         const thisUserResponse = await request(app)
             .get(myUserRoute.raw).withAuth(accessToken);
@@ -41,33 +41,8 @@ describe("Pipeline: Dados do usuário atual", () => {
 
 })
 
-describe("Pipeline: Perfil público", () => {
-    test("Usuário visita perfil inexistente", async () => {
-        const profile = "UNKNOWN"
-
-        const { accessToken } = await signCatch("sign-in", memberUser);
-
-        const unknownUserResponse = await request(app)
-            .get(userProfileRoute.raw + profile).withAuth(accessToken);
-
-        expect(unknownUserResponse.status).toBe(404)
-    })
-
-    test("Usuário visita perfil existente", async () => {
-        const profile = adminUser.username
-
-        const { accessToken } = await signCatch("sign-in", memberUser);
-
-        const response = await request(app)
-            .get(userProfileRoute.raw + profile).withAuth(accessToken);
-
-        expect(response.status).toBe(200);
-
-        // "E-mail" não aparece na response
-        expect(response.body.email).toBeUndefined();
-    })
-
-    test("Usuário acessa o próprio perfil", async () => {
+describe("Pipeline: /:profile_name", () => {
+    test("OK (Visitar próprio perfil)", async () => {
         // Quando isso acontece, informações normalmente privadas estarão visíveis (pois é o próprio usuário)
         const profile = memberUser.username
 
@@ -82,11 +57,83 @@ describe("Pipeline: Perfil público", () => {
         expect(response.body.email).toBeDefined();
     })
 
+    test("OK (Visitar outro perfil)", async () => {
+        const profile = adminUser.username
+
+        const { accessToken } = await signCatch("sign-in", memberUser);
+
+        const response = await request(app)
+            .get(userProfileRoute.raw + profile).withAuth(accessToken);
+
+        expect(response.status).toBe(200);
+
+        // "E-mail" não aparece na response
+        expect(response.body.email).toBeUndefined();
+    })
+
+    test("Inválido", async () => {
+        const profile = "UNKNOWN"
+
+        const { accessToken } = await signCatch("sign-in", memberUser);
+
+        const unknownUserResponse = await request(app)
+            .get(userProfileRoute.raw + profile).withAuth(accessToken);
+
+        expect(unknownUserResponse.status).toBe(404)
+    })
+
 })
 
 
+describe("Pipeline: /me/edit", () => {
+    test("OK", async () => {
+        // Login
+        const user = await createTestUser();
+        const { accessToken, refreshToken } = await signCatch("sign-in", user);
 
-describe("Pipeline: Deletar conta", () => {
+        const newUsername = "Fulano";
+
+        const editResponse = await request(app)
+            .put(userEditRoute.raw)
+            .send({
+                username: newUsername
+            })
+            .withAuth(accessToken, refreshToken);
+        expect(editResponse.status).toBe(200);
+
+        // Verificar se o campo foi alterado
+        const response = await request(app)
+            .get(myUserRoute.raw).withAuth(accessToken);
+        expect(response.body.username).toBe(newUsername);
+    });
+
+    test("Campo indisponível", async () => {
+        // Login
+        const user = await createTestUser();
+        const { accessToken, refreshToken } = await signCatch("sign-in", user);
+
+        const editResponse = await request(app)
+            .put(userEditRoute.raw)
+            .send({
+                permission: "ADMIN"
+            })
+            .withAuth(accessToken, refreshToken);
+        expect(editResponse.status).toBe(422);
+    });
+
+    test("Refresh token inválido ou inexistente", async () => {
+        // Login
+        const { accessToken } = await signCatch("sign-in", memberUser);
+
+        // Deletar conta
+        const editResponse = await request(app)
+            .put(userEditRoute.raw).withAuth(accessToken);
+        expect(editResponse.status).toBe(401);
+    });
+})
+
+
+describe("Pipeline: /me/delete", () => {
     test("OK", async () => {
         // Login
         const user = await createTestUser();

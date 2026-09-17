@@ -19,50 +19,58 @@ import "../../../shared/__tests__/utils.js"
 
 const { refreshRoute, signInRoute, signUpRoute, logoutRoute } = routesMetadataV1;
 
-describe("Pipeline: Registro", () => {
-    test("Requisição inválida (E-mail mal formatado)", async () => {
+describe("Pipeline: /sign-up", () => {
+    
+
+    test("OK", async () => {
+        const newUserEmail = `test-${randomUUID()}@gmail.com`
+
         const { response } = await signCatch("sign-up", {
+            "email": newUserEmail,
+            "password": "12345"
+        });
+        expect(response.status).toBe(201); // CREATED
+
+        const { id: userId, token: accessToken } = response.body;
+        const validToken = jwt.verify(accessToken, JWT_SECRET as jwt.Secret) as JwtPayload;
+
+        expect(validToken.userId).toBe(userId); // Token válido
+    })
+
+    
+    test("Registro duplicado", async () => {
+        const newUserEmail = `test-${randomUUID()}@gmail.com`
+
+        await signCatch("sign-up", {
+            "email": newUserEmail,
+            "password": "12345"
+        });
+        const { response } = await signCatch("sign-up", {
+            "email": newUserEmail,
+            "password": "12345"
+        });
+        expect(response.status).toBe(409); // CONFLICT
+    })
+
+
+    test("Requisição inválida", async () => {
+        // E-mail inválido
+        const { response: invalidEmailResponse } = await signCatch("sign-up", {
             "email": "email",
             "password": memberUser.password
         });
-        expect(response.status).toBe(422)
-    })
+        expect(invalidEmailResponse.status).toBe(422);
 
-    test("Requisição inválida (Senha pequena)", async () => {
-        const { response } = await signCatch("sign-up", {
+        const { response: invalidPasswordResponse } = await signCatch("sign-up", {
             "email": memberUser.email,
             "password": "1"
         });
-        expect(response.status).toBe(422)
-    })
-
-    const newUserEmail = `test-${randomUUID()}@gmail.com`
-    test("Registro OK", async () => {
-        const { response } = await signCatch("sign-up", {
-            "email": newUserEmail,
-            "password": "12345"
-        });
-
-        expect(response.status).toBe(201) // CREATED
-
-        const { id: userId, token: accessToken } = response.body
-        const validToken = jwt.verify(accessToken, JWT_SECRET as jwt.Secret) as JwtPayload
-
-        expect(validToken.userId).toBe(userId) // Token válido
-    })
-
-    test("Registro duplicado", async () => {
-        const { response } = await signCatch("sign-up", {
-            "email": newUserEmail,
-            "password": "12345"
-        });
-        expect(response.status).toBe(409) // CONFLICT
-    })
-
+        expect(invalidPasswordResponse.status).toBe(422);
+    });
 })
 
-describe("Pipeline: Login", () => {
-    test("Login OK", async () => {
+describe("Pipeline: /sign-in", () => {
+    test("OK", async () => {
         const { response, accessToken, refreshToken } = await signCatch("sign-in", memberUser);
         expect(response.status).toBe(200);
 
@@ -76,7 +84,7 @@ describe("Pipeline: Login", () => {
         expect(validRefreshToken.jti).toBeDefined(); // jti definido (é exclusivo dos refresh tokens)
     })
 
-    test("Login OK (ADMIN)", async () => {
+    test("OK (ADMIN)", async () => {
         const { response, accessToken } = await signCatch("sign-in", adminUser);
         expect(response.status).toBe(200);
 
@@ -84,7 +92,7 @@ describe("Pipeline: Login", () => {
         expect(validAccessToken.permission).toBe(Permission.ADMIN); // O usuário é admin, logo o campo "permissão" existe
     })
 
-    test("Login inválido", async () => {
+    test("Inválido", async () => {
         const { response } = await signCatch("sign-in", {
             "email": "not_registered@gmail.com",
             "password": "12345"
@@ -93,8 +101,8 @@ describe("Pipeline: Login", () => {
     })
 })
 
-describe("Pipeline: Refresh", () => {
-    test("Rotação de tokens bem-sucedida", async () => {
+describe("Pipeline: /refresh", () => {
+    test("OK", async () => {
         // Login
         const { accessToken: AToken1, refreshToken: RToken1 } = await signCatch("sign-in", memberUser);
 
@@ -114,7 +122,7 @@ describe("Pipeline: Refresh", () => {
         expect(refreshResponse2.status).toBe(200);
     });
 
-    test("Detecção de reuso de tokens", async () => {
+    test("Reuso de tokens", async () => {
         // Login
         const { accessToken: AToken1, refreshToken: RToken1 } = await signCatch("sign-in", memberUser);
 
@@ -138,8 +146,8 @@ describe("Pipeline: Refresh", () => {
     });
 });
 
-describe("Pipeline: Logout", () => {
-    test("Logout bem-sucedido", async () => {
+describe("Pipeline: /logout", () => {
+    test("OK", async () => {
         const { accessToken, refreshToken } = await signCatch('sign-in', memberUser);
 
         const logoutResponse = await request(app)
