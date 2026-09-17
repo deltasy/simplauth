@@ -1,0 +1,10 @@
+node_modules
+watcherz-api/node_modules
+watcherz-web/node_modules
+shared/node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.gitignore
+dist

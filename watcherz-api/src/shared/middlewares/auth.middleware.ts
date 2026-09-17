@@ -4,7 +4,7 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import {
     JWT_SECRET
 
-} from "../../config/env.js";
+} from "../../../../shared/config/env.js";
 
 interface TokenPayload {
     userId: string;

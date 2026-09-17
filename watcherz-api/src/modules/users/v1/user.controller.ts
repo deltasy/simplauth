@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express"
 
 import { AuthService } from "../../auth/auth.service.js";
-import { ENV_TYPE } from "../../../config/env.js";
+import { ENV_TYPE } from "../../../../../shared/config/env.js";
 import { UserService } from "../user.service.js";
 
 

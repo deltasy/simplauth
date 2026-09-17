@@ -1,7 +1,13 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
-import { api, baseUrl } from "./api"; // Sua instância base
+import { api } from "./api"; // Sua instância base
+
+import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
+
+const { 
+    refreshRoute 
+} = routesMetadataV1;
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -76,7 +82,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.get(
-          baseUrl + "/user/refresh",
+          refreshRoute.raw,
           { withCredentials: true } 
         );
 

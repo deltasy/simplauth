@@ -1,6 +1,6 @@
 import { test, expect } from "vitest"
 import jwt from "jsonwebtoken"
-import { JWT_SECRET } from "../src/config/env.js"
+import { JWT_SECRET } from "../../shared/config/env.js"
 
 import { Permission } from "@prisma/client"
 

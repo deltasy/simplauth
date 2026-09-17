@@ -2,4 +2,4 @@ services:
   api:
     build:
       context: .
-      dockerfile: watcherz-api/dockerfile
+      dockerfile: watcherz-api/Dockerfile

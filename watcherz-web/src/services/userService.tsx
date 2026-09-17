@@ -1,6 +1,11 @@
-import { useEffect, useState } from "react";
 import { api } from "./api";
 
+import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
+
+
+const { 
+    myUserRoute
+} = routesMetadataV1;
 
 type Permission = 'MEMBER' | 'ADMIN'
 
@@ -14,9 +19,7 @@ export interface User {
 
 export const getUserData = async (): Promise<User> => {
     try{
-        const response = await api.get(
-            '/user/this'
-        );
+        const response = await api.get(myUserRoute.raw);
         return response.data;
 
     }catch(err){

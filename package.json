@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "actions": "git add . && git commit --amend --no-edit && git push --force-with-lease",
+    "dev:web": "npm run dev -w watcherz-web",
+    "dev": "concurrently \"npm run dev -w watcherz-web\" \"docker compose up\""
+  },
+  "workspaces": [
+    "watcherz-api",
+    "watcherz-web",
+    "shared"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/deltasy/watcherz-api.git"
@@ -11,7 +20,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/deltasy/watcherz-api/issues"
   },
@@ -20,6 +29,7 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "concurrently": "^10.0.5",
     "typescript": "^7.0.2"
   }
 }

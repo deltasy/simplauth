@@ -1,10 +1,16 @@
 import axios, { AxiosError } from "axios";
-import { api, baseUrl } from "./api";
+import { api } from "./api";
 import { getToken, setToken } from "./setupInterceptors";
+
+import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
+
+const { 
+    signInRoute, signUpRoute, logoutRoute, refreshRoute 
+} = routesMetadataV1;
 
 export const signIn = async (email: string, password: string) => {
     try {
-        const response = await api.post("/user/sign-in", {
+        const response = await api.post(signInRoute.raw, {
             email: email,
             password: password
         });
@@ -18,7 +24,7 @@ export const signIn = async (email: string, password: string) => {
 
 export const signUp = async (email: string, password: string) => {
     try {
-        const response = await api.post("/user/sign-up", {
+        const response = await api.post(signUpRoute.raw, {
             email: email,
             password: password
         });
@@ -31,7 +37,7 @@ export const signUp = async (email: string, password: string) => {
 export const logout = async () => {
     try {
         const response = await api.post(
-            "/user/logout",
+            logoutRoute.raw,
             {},
             { withCredentials: true } 
         );
@@ -51,7 +57,7 @@ export async function restoreSession() {
 
     try {
         const { data } = await axios.get(
-            baseUrl + "/user/refresh",
+            refreshRoute.raw,
             { withCredentials: true }
         );
         setToken(data.access_token);

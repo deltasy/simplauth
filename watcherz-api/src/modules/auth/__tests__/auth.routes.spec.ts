@@ -3,7 +3,7 @@ import { describe, test, expect } from "vitest"
 
 import request from "supertest"
 
-import { JWT_SECRET } from "../../../config/env.js"
+import { JWT_SECRET } from "../../../../../shared/config/env.js"
 
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import { Permission } from "@prisma/client"
@@ -20,7 +20,7 @@ import "../../../shared/__tests__/utils.js"
 const { refreshRoute, signInRoute, signUpRoute, logoutRoute } = routesMetadataV1;
 
 describe("Pipeline: /sign-up", () => {
-    
+
 
     test("OK", async () => {
         const newUserEmail = `test-${randomUUID()}@gmail.com`
@@ -37,7 +37,7 @@ describe("Pipeline: /sign-up", () => {
         expect(validToken.userId).toBe(userId); // Token válido
     })
 
-    
+
     test("Registro duplicado", async () => {
         const newUserEmail = `test-${randomUUID()}@gmail.com`
 

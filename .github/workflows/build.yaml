@@ -15,14 +15,14 @@ env:
   JWT_RTOKEN_EXPIRES_IN: "7d"
   JWT_RTOKEN_EXPIRES_MS: "604800000"
 
+defaults:
+  run:
+    working-directory: ./watcherz-api
+
 jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./watcherz-api
 
     steps:
       - name: Branch clone
@@ -38,6 +38,7 @@ jobs:
         run: npm ci
 
       - name: Prisma start
+        working-directory: ./watcherz-api
         run: npx prisma generate
         
       - name: Test
@@ -47,10 +48,6 @@ jobs:
     name: Integration Tests
     needs: unit-tests
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./watcherz-api
 
     services:
       postgres:

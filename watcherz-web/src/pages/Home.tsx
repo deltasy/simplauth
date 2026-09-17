@@ -2,8 +2,8 @@ import { logout, restoreSession } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { getUserData } from "../services/userDataService";
-import type { User } from "../services/userDataService";
+import { getUserData } from "../services/userService";
+import type { User } from "../services/userService";
 
 
 export default function Home() {

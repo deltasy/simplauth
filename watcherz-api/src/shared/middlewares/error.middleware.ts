@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express"
 import { Prisma } from "@prisma/client";
-import { ENV_TYPE } from "../../config/env.js";
+import { ENV_TYPE } from "../../../../shared/config/env.js";
 
 import jwt from "jsonwebtoken"
 
@@ -15,16 +15,16 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
         }
     }
 
-    if(error instanceof jwt.TokenExpiredError || error instanceof jwt.JsonWebTokenError){
-        return res.status(401).json({error: "Token inválido ou expirado"})
+    if (error instanceof jwt.TokenExpiredError || error instanceof jwt.JsonWebTokenError) {
+        return res.status(401).json({ error: "Token inválido ou expirado" })
     }
 
     // Erros genéricos não-tratados
 
     const errorStatus = res.statusCode !== 200 ? res.statusCode : 500
 
-    return res.status(errorStatus).json({ 
-        error: error.cause, 
+    return res.status(errorStatus).json({
+        error: error.cause,
         stack: ENV_TYPE === "production" ? "hidden" : error.stack
     });
 }

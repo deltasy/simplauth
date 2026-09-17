@@ -2,16 +2,19 @@ FROM node:26-alpine
 
 WORKDIR /app
 
-COPY "package.json" .
-RUN npm install
+# Copiar as dependências de todos os workspaces para não dar invalidação de contrato (definido no package principal)
+COPY package*.json ./
+COPY watcherz-api/package*.json ./watcherz-api/
+COPY watcherz-web/package*.json ./watcherz-web/
 
-COPY ./shared ./shared
+RUN npm ci
 
-WORKDIR /app/backend
+COPY shared/ ./shared/
+COPY watcherz-api/ ./watcherz-api/
 
-COPY . .
+WORKDIR /app/watcherz-api
+           
 RUN npx prisma generate
-
 RUN npx tsc --noEmit
 
 CMD ["npm", "start"]
