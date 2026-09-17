@@ -1,0 +1,28 @@
+{
+  "name": "watcher-zero",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "actions": "git add . && git commit --amend --no-edit && git push origin --force-with-lease"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deltasy/watcherz-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/deltasy/watcherz-api/issues"
+  },
+  "homepage": "https://github.com/deltasy/watcherz-api#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

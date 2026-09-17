@@ -1,6 +1,6 @@
 import { registry } from "../../../config/openapi.js";
 import { refreshTokenCookie, signRequestSchema, signUpResponseSchema, tokenResponseSchema } from "../auth.schema.js";
-import { routesMetadataV1 } from "../../../shared/routes/v1.metadata.js";
+import { routesMetadataV1 } from "../../../../../shared/routes/v1.metadata.js";
 
 export default function registerAuthDocs() {
     const { signUpRoute, signInRoute, logoutRoute, refreshRoute } = routesMetadataV1;
@@ -10,7 +10,7 @@ export default function registerAuthDocs() {
     const signUpRequest = registry.register("SignUpRequest", signRequestSchema);
 
     const signInResponse = registry.register("SignInResponse", tokenResponseSchema);
-    const signUpResponse = registry.register("SignInResponse", signUpResponseSchema);
+    const signUpResponse = registry.register("SignUpResponse", signUpResponseSchema);
 
     // --------------------------------------------------------------------------
 

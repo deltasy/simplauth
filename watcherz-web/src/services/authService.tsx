@@ -1,7 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { api, baseUrl } from "./api";
 import { getToken, setToken } from "./setupInterceptors";
-import { useNavigate } from "react-router-dom";
 
 export const signIn = async (email: string, password: string) => {
     try {

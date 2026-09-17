@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
     test: {
         fileParallelism: false,
+        isolate: false,
         
         // Roda UMA VEZ no processo pai
         globalSetup: ['./src/shared/__tests__/global.setup.ts'],

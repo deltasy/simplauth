@@ -13,7 +13,7 @@ export const refreshTokenCookie = {
 } as HeadersObject;
 
 export const tokenResponseSchema = z.object({
-    access_token: z.string().openapi({description: "Access Token"})
+    access_token: z.string().openapi({description: "Access Token"}).openapi({example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."}),
 });
 
 
@@ -22,11 +22,12 @@ export const signRequestSchema = z.object({
     email: z.string().min(4).includes("@").endsWith(".com").openapi({example: "admin@gmail.com"}),
     password: z.string().min(4).max(15).openapi({example: "12345"}),
 })
+export type signRequest = z.infer<typeof signRequestSchema>
 
 
 
 export const signUpResponseSchema = z.object({
     id: z.string().openapi({description: "ID do usuário", example:"6c9af062-c6b7-48f8-b77a-813810ad3919"}),
-    access_token: z.string().openapi({description: "Access Token"})
+    access_token: z.string().openapi({description: "Access Token", example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."})
 })
 

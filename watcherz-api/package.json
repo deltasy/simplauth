@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "actions": "git add . && git commit --amend --no-edit && git push origin --force-with-lease",
     "test:unit": "vitest run --dir tests --config ./vitest.unit.config.ts",
     "test:integration:local": "dotenv -e .env.test -- prisma db push --accept-data-loss && dotenv -e .env.test -- vitest run --dir src/modules --config ./vitest.integration.config.ts",
     "test:integration:ci": "prisma db push --accept-data-loss && vitest run --dir src/modules --config ./vitest.integration.config.ts",
