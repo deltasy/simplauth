@@ -4,17 +4,14 @@ services:
     ports:
       - "3000:3000"
 
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - PORT=${PORT:-3000}
-      - ENV_TYPE=${ENV_TYPE:-development}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_ATOKEN_EXPIRES_IN=${JWT_ATOKEN_EXPIRES_IN:-1m}
-      - JWT_RTOKEN_EXPIRES_IN=${JWT_RTOKEN_EXPIRES_IN:-7d}
-      - JWT_RTOKEN_EXPIRES_MS=${JWT_RTOKEN_EXPIRES_MS:-604800000}
-
+      - DATABASE_URL=${DATABASE_URL:-postgresql://docker:docker@postgres:5432/watcher-zero}
+      
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   postgres:
     image: "postgres:16"
@@ -27,6 +24,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker -d watcher-zero"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data: {}

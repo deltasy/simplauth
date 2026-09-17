@@ -1,7 +1,7 @@
 import { config } from "dotenv"
 
 // pegará o .env mais próximo
-config();
+config({ quiet: false});
 
 export const {
     ENV_TYPE,

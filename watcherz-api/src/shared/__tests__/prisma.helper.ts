@@ -1,7 +1,7 @@
 import { Permission, type User } from "@prisma/client";
 import { prisma } from "../database/prisma.service.js";
 import { randomUUID } from "node:crypto";
-import { passwordHasher } from "../../modules/auth/auth.service.js";
+import { AuthService } from "../../modules/auth/auth.service.js";
 import { userSchema } from "../../modules/users/user.schema.js";
 
 export const memberUser = await createTestUser();
@@ -18,7 +18,7 @@ export async function createTestUser(permission?: Permission){
     await prisma.user.create({
         data: {
             email: userPayload.email,
-            passwordHash: await passwordHasher(userPayload.password),
+            passwordHash: await AuthService.hashPassword(userPayload.password),
             username: userPayload.username,
             permission: userPayload.permission
         }

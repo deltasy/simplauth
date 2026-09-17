@@ -4,12 +4,12 @@ import { JWT_SECRET } from "../src/config/env.js"
 
 import { Permission } from "@prisma/client"
 
-import { generateToken } from "../src/modules/auth/auth.service.js"
+import { AuthService } from "../src/modules/auth/auth.service.js"
 
 
 
 test("Geração de token de MEMBRO", () => {
-    const token = generateToken("UUID-123456", "7d")
+    const token = AuthService.generateToken("UUID-123456", "7d")
     const parsedToken = jwt.verify(token, JWT_SECRET as jwt.Secret) as jwt.JwtPayload
 
     const userId = parsedToken.userId
@@ -18,7 +18,7 @@ test("Geração de token de MEMBRO", () => {
 })
 
 test("Geração de token de ADMIN", () => {
-    const token = generateToken("UUID-123456", "7d", Permission.ADMIN)
+    const token = AuthService.generateToken("UUID-123456", "7d", Permission.ADMIN)
     const parsedToken = jwt.verify(token, JWT_SECRET as jwt.Secret) as jwt.JwtPayload
 
     // A informação de "Admin" deve ser conservada ao decodificar o token

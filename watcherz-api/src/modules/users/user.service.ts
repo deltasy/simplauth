@@ -1,68 +1,75 @@
-import {
-    JWT_ATOKEN_EXPIRES_IN
-} from "../../config/env.js";
-
-import { prisma } from "../../shared/database/prisma.service.js";
+import { userDB } from "../../shared/database/prisma.service.js";
 import { Prisma } from "@prisma/client";
 
 import type { User } from "./user.schema.js";
-import { generateToken, passwordHasher } from "../auth/auth.service.js";
+import { AuthService } from "../auth/auth.service.js";
 
+export const UserService = {
+    // Fetch irrestrito (sem limitações) que só é usado para validações internas
+    async fetchUser(whereArg: Prisma.UserWhereInput) {
+        return await userDB.findFirst({
+            where: whereArg
+        });
+    },
 
-const userDB = prisma.user
+    async fetchCurrentUser(whereArg: Prisma.UserWhereInput) {
+        return await userDB.findFirst({
+            where: whereArg,
+            omit: {
+                id: true,
+                passwordHash: true,
+                is_deleted: true
+            }
+        });
+    },
 
-// Fetch irrestrito (sem limitações) que só é usado para validações internas
-export async function fetchUserFull(whereArg: Prisma.UserWhereUniqueInput) {
-    return await userDB.findUnique({
-        where: whereArg
-    });
-}
+    // Fetch padrão que não mostra dados sensíveis
+    async fetchUserProfile(whereArg: Prisma.UserWhereInput) {
+        return await userDB.findFirst({
+            where: whereArg,
+            omit: {
+                id: true,
+                passwordHash: true,
+                email: true,
+                permission: true,
+                is_deleted: true
+            }
+        });
+    },
 
-// Fetch que retorna dados mais detalhados
-export async function fetchMyUser(whereArg: Prisma.UserWhereUniqueInput) {
-    return await userDB.findUnique({
-        where: whereArg,
-        omit: {
-            id: true,
-            passwordHash: true
-        }
-    });
-}
+    
+    async editCurrentUser(userId: string, editArg: Prisma.UserUpdateArgs) {
+        return await userDB.updateMany({
+            where: {
+                id: userId,
+                is_deleted: false
+            },
+            data: editArg
+        });
+    },
 
-// Fetch padrão que não mostra dados sensíveis
-export async function fetchUser(whereArg: Prisma.UserWhereUniqueInput) {
-    return await userDB.findUnique({
-        where: whereArg,
-        omit: {
-            id: true,
-            passwordHash: true,
-            email: true,
-            permission: true
-        }
-    });
-}
+    async deleteCurrentUser(userId: string) {
+        await userDB.updateMany({
+            where: {
+                id: userId,
+                is_deleted: false
+            },
+            data: {
+                is_deleted: true
+            }
+        });
+    },
 
-export async function editUser(whereArg: Prisma.UserWhereUniqueInput, editArg: Prisma.UserUpdateArgs) {
-    return await userDB.update({
-        where: whereArg,
-        data: editArg
-    });
-}
+    async createUser(user: User) {
+        const { email, password, username } = user;
 
-export async function showUsers() {
-    return await userDB.findMany({})
-}
-
-export async function createUser(user: User) {
-    const { email, password, username } = user;
-
-    const newUser = await userDB.create({
-        data: {
-            username: username!,
-            email: email,
-            passwordHash: await passwordHasher(password),
-        }
-    })
-    return [newUser.id, generateToken(newUser.id, JWT_ATOKEN_EXPIRES_IN!)]
+        return await userDB.create({
+            data: {
+                username: username!,
+                email: email,
+                passwordHash: await AuthService.hashPassword(password),
+            }
+        });
+    }
 }
 
