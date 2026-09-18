@@ -1,11 +1,14 @@
 services:
   api:
-    build: .
+    build:
+      context: ../
+      dockerfile: watcherz-api/Dockerfile
+      
     ports:
       - "3000:3000"
 
     env_file:
-      - .env
+      - ../.env
     environment:
       - DATABASE_URL=${DATABASE_URL:-postgresql://docker:docker@postgres:5432/watcher-zero}
       

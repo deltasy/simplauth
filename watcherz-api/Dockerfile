@@ -9,6 +9,7 @@ COPY watcherz-web/package*.json ./watcherz-web/
 
 RUN npm ci
 
+COPY .env ./
 COPY shared/ ./shared/
 COPY watcherz-api/ ./watcherz-api/
 
@@ -17,4 +18,4 @@ WORKDIR /app/watcherz-api
 RUN npx prisma generate
 RUN npx tsc --noEmit
 
-CMD ["npm", "start"]
+CMD ["npx", "tsx", "./src/server.ts"]

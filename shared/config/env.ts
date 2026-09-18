@@ -1,11 +1,19 @@
-import { config } from "dotenv"
+import { config } from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// pegará o .env mais próximo
-config({ quiet: false});
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+console.log(__dirname)
+
+config({ 
+    path: path.resolve(__dirname, "../../.env") 
+});
 
 export const {
     ENV_TYPE,
     DATABASE_URL,
+    URL,
     PORT,
     JWT_SECRET,
     JWT_ATOKEN_EXPIRES_IN,

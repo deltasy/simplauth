@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
-import { api } from "./api"; // Sua instância base
+import { api, standartURL } from "./api"; // Sua instância base
 
 import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
 
@@ -82,7 +82,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.get(
-          refreshRoute.raw,
+          `${standartURL}/${refreshRoute.raw}`,
           { withCredentials: true } 
         );
 

@@ -9,6 +9,7 @@ on:
 env:
   ENV_TYPE: "action-test"
   JWT_SECRET: "dummy"
+  URL: "dummy"
   PORT: "3000"
   DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/watcherz_test"
   JWT_ATOKEN_EXPIRES_IN: "1m"
