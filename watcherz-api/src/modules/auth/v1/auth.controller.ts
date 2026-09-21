@@ -20,14 +20,8 @@ export const AuthController = {
         try {
             const newUser = await UserService.createUser(req.body);
             const { accessToken, refreshToken } = await AuthService.renewTokens(newUser.id)
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                path: routesMetadataV1.baseUrl,
-                secure: ENV_TYPE === "production",
-                sameSite: "strict",
-                maxAge: JWT_RTOKEN_EXPIRES_MS
-            });
-
+            
+            setRefreshToken(res, refreshToken);
             return res.status(201).json({ id: newUser.id, token: accessToken });
 
         } catch (error) {
@@ -45,14 +39,8 @@ export const AuthController = {
             }
 
             const { accessToken, refreshToken } = await AuthService.renewTokens(user.id, user.permission)
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                path: routesMetadataV1.baseUrl,
-                secure: ENV_TYPE === "production",
-                sameSite: "strict",
-                maxAge: JWT_RTOKEN_EXPIRES_MS
-            });
-
+            
+            setRefreshToken(res, refreshToken);
             return res.status(200).json({ token: accessToken })
 
         } catch (error) {
@@ -65,13 +53,7 @@ export const AuthController = {
             try {
                 const token = req.cookies.refreshToken as string;
                 await AuthService.revokeRefreshToken(token)
-                res.cookie("refreshToken", '', {
-                    httpOnly: true,
-                    path: routesMetadataV1.baseUrl,
-                    secure: ENV_TYPE === "production",
-                    sameSite: "strict",
-                    expires: new Date(0)
-                });
+                res.clearCookie("refreshToken");
 
             } catch (error) { } // Se o token era inválido, ignore. Deslogue mesmo assim
 
@@ -96,14 +78,7 @@ export const AuthController = {
                 req.cookies.refreshToken as string
             )
 
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                path: routesMetadataV1.baseUrl,
-                secure: ENV_TYPE === "production",
-                sameSite: "strict",
-                maxAge: JWT_RTOKEN_EXPIRES_MS
-            })
-
+            setRefreshToken(res, refreshToken);
             return res.status(200).json({ token: accessToken })
 
         } catch (error: any) {
@@ -113,3 +88,13 @@ export const AuthController = {
         }
     }
 };
+
+function setRefreshToken(res: Response, refreshToken: string){
+    return res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        path: routesMetadataV1.baseUrl,
+        secure: ENV_TYPE === "production",
+        sameSite: "strict",
+        maxAge: JWT_RTOKEN_EXPIRES_MS
+    })
+}

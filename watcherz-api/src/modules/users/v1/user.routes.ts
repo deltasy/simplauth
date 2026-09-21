@@ -18,6 +18,7 @@ const userRouterV1 = express.Router();
 
 userRouterV1.get(
     myUserRoute.relative,
+    auth,
     UserController.fetchCurrentUser
 );
 

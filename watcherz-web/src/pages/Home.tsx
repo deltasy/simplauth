@@ -6,6 +6,7 @@ import { checkField, editField, getUserData } from "../services/userService";
 import type { User } from "../services/userService";
 
 import ReactiveInput from "../components/ReactiveInput";
+import { getToken } from "../services/setupInterceptors";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -37,10 +38,10 @@ export default function Home() {
     async function handleLogout(){
         try{
             await logout();
-            navigate('/')
+            navigate('/');
 
-        }catch(error){
-            console.log(error)
+        }catch(err){
+            console.log(err);
         }
     }
 
@@ -95,8 +96,8 @@ export default function Home() {
                     return;
             }
 
-        }catch(error){
-            console.log(error);
+        }catch(err){
+            console.log(err);
         }
     }
 
