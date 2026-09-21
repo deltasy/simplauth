@@ -19,9 +19,16 @@ export const tokenResponseSchema = z.object({
 
 
 export const signRequestSchema = z.object({
-    email: z.string().min(4).includes("@").endsWith(".com").openapi({example: "admin@gmail.com"}),
-    password: z.string().min(4).max(15).openapi({example: "12345"}),
-})
+    email: z.string().includes("@", {error: "E-mail inválido"})
+    .endsWith(".com", {error: "E-mail inválido"})
+    .openapi({example: "fulano@gmail.com"}),
+
+    password: z.string({error: "Apenas texto é permitido"}
+    ).min(4, "Senha muito curta").max(15, "Senha muito grande").openapi({example: "senha123"}),
+
+    username: z.string({error: "Apenas texto é permitido"})
+    .min(4, "Nickname muito curto").max(12, "Nickname muito grande").optional().openapi({example: "Usuario42"}),
+});
 export type signRequest = z.infer<typeof signRequestSchema>
 
 

@@ -19,13 +19,13 @@ export default function Register() {
         setIsSubmiting(true);
 
         try {
-            const data = await signUp(email, password);
+            await signUp(email, password);
             navigate('/home')
 
         } catch (error) { 
             if(!(error instanceof AxiosError)) return;
 
-            alert(error.response?.data.error);
+            alert(error.response?.data[0].message);
         }
 
         setIsSubmiting(false);
