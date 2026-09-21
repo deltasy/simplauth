@@ -103,8 +103,8 @@ export default function Home() {
     if(!thisUser) return;
 
     return (
-        <div className="p-5">
-            <button onClick={handleLogout} className="bg-cyan-500 mb-10 w-25 font-bold px-4 py-2 rounded cursor-pointer">Deslogar</button>
+        <>
+            <button onClick={handleLogout} className="m-5 bg-red-500 w-25 font-bold px-4 py-2 rounded cursor-pointer">Deslogar</button>
 
             <div className="bg-gray-600 text-white p-10">
                 <h1 className="text-xl font-bold mb-6">Dados:</h1>
@@ -148,6 +148,6 @@ export default function Home() {
                     </li>
                 </ul>
             </div>
-        </div>
+        </>
     );
 }

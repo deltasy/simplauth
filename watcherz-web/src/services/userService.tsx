@@ -6,7 +6,8 @@ import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
 const { 
     myUserRoute,
     checkAttRoute,
-    userEditRoute
+    userEditRoute,
+    userProfileRoute
 } = routesMetadataV1;
 
 type Permission = 'MEMBER' | 'ADMIN'
@@ -57,3 +58,16 @@ export const getUserData = async (): Promise<User> => {
     }
 
 }
+
+export const getProfileData = async (username: string): Promise<User> => {
+    try{
+        console.log(username)
+        const response = await api.get(userProfileRoute.raw + username);
+        return response.data;
+
+    }catch(err){
+        throw err;
+    }
+
+}
+
