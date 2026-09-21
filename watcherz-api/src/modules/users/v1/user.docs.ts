@@ -15,8 +15,6 @@ export default function registerUserDocs() {
     const editUserRequest = registry.register("editUserRequest", editProfileSchema);
     const myUserResponse = registry.register("MyUserResponse", selfProfileSchema);
 
-
-
     // PERFIL PÚBLICO
     registry.registerPath({
         method: "get",
@@ -125,7 +123,7 @@ export default function registerUserDocs() {
             body: {
                 content: {
                     "application/json": {
-                        schema: deletionConfirmSchema,
+                        schema: userDeletionRequest,
                     },
                 },
             },
