@@ -48,21 +48,25 @@ export const UserController = {
     
     async verifyAttribute(req: Request, res: Response, next: NextFunction) {
         try {
+            if(!req.query) return res.status(422).json({error: "Atributos não especificados"});
+
             const { username, email } = editProfileSchema.parse(req.query);
 
-            let unique = true;
+            if(username === "" || email === "") return res.status(422).json({error: "Atributos não especificados"});
+
             if(username){
                 const data = await UserService.fetchUser({ username: username });
-                if(data) unique = false;
+                if(data) return res.status(200).json({message: "Disponível!"});
 
             }
             
             if(email){
                 const data = await UserService.fetchUser({ email: email })
-                if(data) unique = false;
+                if(data) return res.status(200).json({message: "Disponível!"});
             }
 
-            if(unique) return res.status(200).json({message: "Disponível!"});
+
+
             return res.status(409).json({ error: "Já existente" });
 
         } catch (error) {

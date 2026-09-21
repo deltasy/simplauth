@@ -13,6 +13,8 @@ export default function registerUserDocs() {
     const userDeletionRequest = registry.register("userDeletionRequest", deletionConfirmSchema);
 
     const editUserRequest = registry.register("editUserRequest", editProfileSchema);
+    const checkAttRequest = registry.register("checkUserAttributeRequest", editProfileSchema);
+
     const myUserResponse = registry.register("MyUserResponse", selfProfileSchema);
 
     // PERFIL PÚBLICO
@@ -62,25 +64,6 @@ export default function registerUserDocs() {
             },
             401: {
                 description: "Access Token inválido"
-            }
-        },
-    });
-
-    
-    
-    // CHECK EDIT
-    registry.registerPath({
-        method: "get",
-        path: checkAttRoute.relative_with_prefix,
-        summary: "Checar unicidade de atributo",
-        tags: ["Auth"],
-        security: [{ cookieAuth: [] }],
-        responses: {
-            200: {
-                description: "Refresh Token + Access Token renovados"
-            },
-            403: {
-                description: "Credenciais atuais inválidas para renovação"
             }
         },
     });
@@ -141,4 +124,23 @@ export default function registerUserDocs() {
         },
     });
 
+    // CHECK EDIT
+    registry.registerPath({
+        method: "get",
+        path: checkAttRoute.relative_with_prefix,
+        summary: "Checar atributo",
+        tags: ["Utils"],
+        security: [{ cookieAuth: [] }],
+        request: {
+            query: editProfileSchema
+        },
+        responses: {
+            200: {
+                description: "Disponível"
+            },
+            409: {
+                description: "Indisponível (Já existe)"
+            }
+        },
+    });
 }

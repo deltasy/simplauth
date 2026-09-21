@@ -10,7 +10,7 @@ import "../../../shared/__tests__/utils.js"
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
 
 
-const { myUserRoute, userProfileRoute, userEditRoute, userDeleteRoute } = routesMetadataV1;
+const { myUserRoute, userProfileRoute, userEditRoute, checkAttRoute, userDeleteRoute } = routesMetadataV1;
 
 
 describe("Pipeline: /me", () => {
@@ -158,5 +158,39 @@ describe("Pipeline: /me/delete", () => {
         const deleteResponse = await request(app)
             .get(userDeleteRoute.raw).withAuth(accessToken, "INVALID RTOKEN");
         expect(deleteResponse.status).toBe(404);
+    });
+})
+
+describe("Pipeline: /check?attr=val", () => {
+    test("OK", async () => {
+        // Login
+        const { accessToken } = await signCatch("sign-in", memberUser);
+
+        // Deletar conta
+        const checkResponse = await request(app)
+            .get(checkAttRoute.raw + "?username=uniqueUsername421").withAuth(accessToken);
+        expect(checkResponse.status).toBe(200);
+    });
+
+    test("Atributo já existente", async () => {
+        const { accessToken } = await signCatch("sign-in", memberUser);
+
+        const checkResponse = await request(app)
+            .get(checkAttRoute.raw + "?username=" + memberUser.username).withAuth(accessToken);
+        expect(checkResponse.status).toBe(409);
+    });
+
+    test("Atributo inválido", async () => {
+        const { accessToken } = await signCatch("sign-in", memberUser);
+
+        const checkResponse = await request(app)
+            .get(checkAttRoute.raw + "?invalid=value").withAuth(accessToken);
+        expect(checkResponse.status).toBe(422);
+    });
+
+    test("Sessão inválida", async () => {
+        const checkResponse = await request(app)
+            .get(checkAttRoute.raw + "?username=uniqueUsername421").withAuth("INVALID ATOKEN");
+        expect(checkResponse.status).toBe(401);
     });
 })

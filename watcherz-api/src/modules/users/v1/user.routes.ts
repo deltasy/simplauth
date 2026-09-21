@@ -18,12 +18,12 @@ const userRouterV1 = express.Router();
 
 userRouterV1.get(
     myUserRoute.relative,
-    auth,
     UserController.fetchCurrentUser
 );
 
 userRouterV1.get(
     checkAttRoute.relative,
+    auth,
     UserController.verifyAttribute
 );
 
