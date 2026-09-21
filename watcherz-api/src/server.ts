@@ -1,5 +1,5 @@
 import express from "express"
-import { PORT } from "../../shared/config/env.js";
+import { PORT } from "./config/env.js";
 
 import { errorHandler } from "./shared/middlewares/error.middleware.js";
 import { assertEnvironment } from "./shared/validate/environment.validate.js";

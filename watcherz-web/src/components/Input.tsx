@@ -1,6 +1,6 @@
-interface InputProps {
+export interface InputProps {
     field: string,
-    value: string,
+    value: string | null,
     type?: "text" | "password",
     placeholder: string,
     setFunction: (value: string) => void,
@@ -13,7 +13,7 @@ export default function Input({
     type = "text",
     placeholder,
     setFunction,
-    className = "bg-white text-black rounded-md p-2 mb-6",
+    className = "bg-white text-black rounded-md p-2 mb-6"
 }: InputProps){
     const inputId = `${field}-input`
 
@@ -25,7 +25,7 @@ export default function Input({
                 type={type}
                 placeholder={placeholder}
                 className={className}
-                value={value}
+                value={value || ""}
                 onChange={(e) => setFunction(e.target.value)}
             />
         </div>

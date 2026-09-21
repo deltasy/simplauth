@@ -6,7 +6,10 @@
   "scripts": {
     "actions": "git add . && git commit --amend --no-edit && git push --force-with-lease",
     "dev:web": "npm run dev -w watcherz-web",
-    "dev": "concurrently \"npm run dev -w watcherz-web\" \"docker compose up\""
+    "dev": "concurrently \"npm run dev -w watcherz-web\" \"docker compose up\"",
+    "test:unit": "npm run test:unit -w watcherz-api",
+    "test:integration:local": "npm run test:integration:local -w watcherz-api",
+    "test:integration:ci": "npm run test:integration:ci -w watcherz-api"
   },
   "workspaces": [
     "watcherz-api",

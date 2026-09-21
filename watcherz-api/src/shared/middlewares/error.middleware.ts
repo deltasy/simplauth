@@ -1,10 +1,12 @@
 import type { NextFunction, Request, Response } from "express"
 import { Prisma } from "@prisma/client";
-import { ENV_TYPE } from "../../../../shared/config/env.js";
+import { ENV_TYPE } from "../../config/env.js";
 
 import jwt from "jsonwebtoken"
+import { ZodError } from "zod";
 
 export const errorHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
+
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
             return res.status(409).json({ error: "Os dados fornecidos entram em conflito com um registro existente." });
@@ -18,6 +20,8 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
     if (error instanceof jwt.TokenExpiredError || error instanceof jwt.JsonWebTokenError) {
         return res.status(401).json({ error: "Token inválido ou expirado" })
     }
+
+    if(error instanceof ZodError) res.statusCode = 422;
 
     // Erros genéricos não-tratados
 

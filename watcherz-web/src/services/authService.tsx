@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { api } from "./api";
+import { api, standartURL } from "./api";
 import { getToken, setToken } from "./setupInterceptors";
 
 import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
@@ -57,7 +57,7 @@ export async function restoreSession() {
 
     try {
         const { data } = await axios.get(
-            refreshRoute.raw,
+            standartURL + refreshRoute.raw,
             { withCredentials: true }
         );
         setToken(data.access_token);

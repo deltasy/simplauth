@@ -8,7 +8,7 @@ import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.j
 import { deletionConfirmSchema, editProfileSchema, selfProfileSchema } from "../user.schema.js";
 
 export default function registerUserDocs() {
-    const { myUserRoute, userProfileRoute, userEditRoute, userDeleteRoute } = routesMetadataV1;
+    const { myUserRoute, userProfileRoute, userEditRoute, checkAttRoute, userDeleteRoute } = routesMetadataV1;
 
     const userDeletionRequest = registry.register("userDeletionRequest", deletionConfirmSchema);
 
@@ -64,6 +64,25 @@ export default function registerUserDocs() {
             },
             401: {
                 description: "Access Token inválido"
+            }
+        },
+    });
+
+    
+    
+    // CHECK EDIT
+    registry.registerPath({
+        method: "get",
+        path: checkAttRoute.relative_with_prefix,
+        summary: "Checar unicidade de atributo",
+        tags: ["Auth"],
+        security: [{ cookieAuth: [] }],
+        responses: {
+            200: {
+                description: "Refresh Token + Access Token renovados"
+            },
+            403: {
+                description: "Credenciais atuais inválidas para renovação"
             }
         },
     });

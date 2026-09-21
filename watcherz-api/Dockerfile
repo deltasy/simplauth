@@ -9,7 +9,6 @@ COPY watcherz-web/package*.json ./watcherz-web/
 
 RUN npm ci
 
-COPY .env ./
 COPY shared/ ./shared/
 COPY watcherz-api/ ./watcherz-api/
 

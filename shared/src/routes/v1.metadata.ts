@@ -27,6 +27,7 @@ export const routesMetadataV1 = Object.freeze({
     signUpRoute: defineRoute(authUrl, authPrefix, '/sign-up'),
     logoutRoute: defineRoute(authUrl, authPrefix, '/logout'),
 
+    checkAttRoute: defineRoute(usersUrl, usersPrefix, '/check'),
     myUserRoute: defineRoute(usersUrl, usersPrefix, '/me'),
     userEditRoute: defineRoute(usersUrl, usersPrefix, '/me/edit'),
     userDeleteRoute: defineRoute(usersUrl, usersPrefix, '/me/delete'),

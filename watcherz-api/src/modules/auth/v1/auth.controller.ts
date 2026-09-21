@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import {
     JWT_RTOKEN_EXPIRES_MS,
     ENV_TYPE,
-} from "../../../../../shared/config/env.js";
+} from "../../../config/env.js";
 
 import { UserService } from "../../users/user.service.js";
 import { AuthService } from "../auth.service.js";

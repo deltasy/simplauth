@@ -11,7 +11,7 @@ import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.j
 
 import { assertRefreshToken } from "../../auth/middlewares/refreshToken.middleware.js";
 
-const { myUserRoute, userProfileRoute, userEditRoute, userDeleteRoute } = routesMetadataV1;
+const { myUserRoute, userProfileRoute, userEditRoute, userDeleteRoute, checkAttRoute } = routesMetadataV1;
 
 const userRouterV1 = express.Router();
 
@@ -21,6 +21,12 @@ userRouterV1.get(
     auth,
     UserController.fetchCurrentUser
 );
+
+userRouterV1.get(
+    checkAttRoute.relative,
+    UserController.verifyAttribute
+);
+
 userRouterV1.get(
     `${userProfileRoute.relative}:profile_name`,
     optionalAuth,
@@ -28,7 +34,6 @@ userRouterV1.get(
 );
 
 // Para operações "críticas" de update e delete, se verifica o refreshToken
-
 userRouterV1.put(
     userEditRoute.relative,
     assertRefreshToken, validate(editProfileSchema),

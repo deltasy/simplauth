@@ -3,7 +3,7 @@ import {
     JWT_ATOKEN_EXPIRES_IN,
     JWT_RTOKEN_EXPIRES_IN,
     JWT_RTOKEN_EXPIRES_MS
-} from "../../../../shared/config/env.js";
+} from "../../config/env.js";
 
 import { prisma, rTokenDB } from "../../shared/database/prisma.service.js";
 import { Permission } from "@prisma/client";

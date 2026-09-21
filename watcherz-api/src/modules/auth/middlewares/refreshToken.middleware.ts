@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express"
 import type { JwtPayload } from "jsonwebtoken"
 
 import jwt from "jsonwebtoken"
-import { JWT_SECRET } from "../../../../../shared/config/env.js";
+import { JWT_SECRET } from "../../../config/env.js";
 
 // Equivalente ao "auth", mas é exclusivo para refresh tokens
 export const assertRefreshToken = async (req: Request, res: Response, next: NextFunction) => {

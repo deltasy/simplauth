@@ -59,7 +59,7 @@ api.interceptors.response.use(
 
     const { error: errorMessage } = error.response.data as any || '';
 
-    if(errorMessage.toLowerCase().includes("credenciais")) return Promise.reject(error);
+    if(errorMessage && errorMessage.toLowerCase().includes("credenciais")) return Promise.reject(error);
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
         if(error.response)
@@ -82,7 +82,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.get(
-          `${standartURL}/${refreshRoute.raw}`,
+          standartURL + refreshRoute.raw,
           { withCredentials: true } 
         );
 

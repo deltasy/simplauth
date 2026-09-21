@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { extendZodWithOpenApi, OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
-import { PORT } from "../../../shared/config/env.js";
+import { PORT } from "./env.js";
 
 import registerUserDocs from "../modules/users/v1/user.docs.js";
 import registerAuthDocs from "../modules/auth/v1/auth.docs.js";

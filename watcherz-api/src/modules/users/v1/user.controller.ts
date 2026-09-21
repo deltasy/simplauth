@@ -1,13 +1,15 @@
 import type { NextFunction, Request, Response } from "express"
 
 import { AuthService } from "../../auth/auth.service.js";
-import { ENV_TYPE } from "../../../../../shared/config/env.js";
+import { ENV_TYPE } from "../../../config/env.js";
 import { UserService } from "../user.service.js";
 
 
 import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
 
 import type { User } from "@prisma/client";
+import { editProfileSchema } from "../user.schema.js";
+import { ZodError } from "zod";
 
 export const UserController = {
     async fetchCurrentUser(req: Request, res: Response, next: NextFunction) {
@@ -37,6 +39,31 @@ export const UserController = {
             }
 
             return res.status(200).json(data);
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    
+    async verifyAttribute(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { username, email } = editProfileSchema.parse(req.query);
+
+            let unique = true;
+            if(username){
+                const data = await UserService.fetchUser({ username: username });
+                if(data) unique = false;
+
+            }
+            
+            if(email){
+                const data = await UserService.fetchUser({ email: email })
+                if(data) unique = false;
+            }
+
+            if(unique) return res.status(200).json({message: "Disponível!"});
+            return res.status(409).json({ error: "Já existente" });
 
         } catch (error) {
             next(error);

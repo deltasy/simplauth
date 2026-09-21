@@ -3,7 +3,7 @@ import { describe, test, expect } from "vitest"
 
 import request from "supertest"
 
-import { JWT_SECRET } from "../../../../../shared/config/env.js"
+import { JWT_SECRET } from "../../../config/env.js"
 
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import { Permission } from "@prisma/client"

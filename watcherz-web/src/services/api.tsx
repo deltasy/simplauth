@@ -1,8 +1,6 @@
 import axios from "axios";
 
-import { URL, PORT } from "../../../shared/config/env.js"
-
-export const standartURL = `${URL}:${PORT}`;
+export const standartURL = 'http://localhost:3000';
 
 export const api = axios.create({
   baseURL: standartURL,

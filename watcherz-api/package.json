@@ -8,6 +8,7 @@
     "test:integration:local": "dotenv -e .env.test -- prisma db push --accept-data-loss && dotenv -e .env.test -- vitest run --dir src/modules --config ./vitest.integration.config.ts",
     "test:integration:ci": "prisma db push --accept-data-loss && vitest run --dir src/modules --config ./vitest.integration.config.ts",
     "start": "tsx ./src/server.ts",
+    "dev:api": "tsx watch src/server.ts",
     "dev": "tsx watch --include \"src/**\" ./src/server.ts",
     "build": "npm install typescript tsx @types/node --save-dev & npx tsc --init & npm install prisma@7.10.0 @types/pg --save-dev & npm install @prisma/client@7.10.0 @prisma/adapter-pg pg dotenv"
   },
