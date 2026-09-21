@@ -56,13 +56,13 @@ export const UserController = {
 
             if(username){
                 const data = await UserService.fetchUser({ username: username });
-                if(data) return res.status(200).json({message: "Disponível!"});
+                if(!data) return res.status(200).json({message: "Disponível!"});
 
             }
             
             if(email){
                 const data = await UserService.fetchUser({ email: email })
-                if(data) return res.status(200).json({message: "Disponível!"});
+                if(!data) return res.status(200).json({message: "Disponível!"});
             }
 
 
