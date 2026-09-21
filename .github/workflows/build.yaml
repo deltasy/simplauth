@@ -11,14 +11,14 @@ env:
   JWT_SECRET: "dummy"
   URL: "dummy"
   PORT: "3000"
-  DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/watcherz_test"
+  DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/simplauth_test"
   JWT_ATOKEN_EXPIRES_IN: "1m"
   JWT_RTOKEN_EXPIRES_IN: "7d"
   JWT_RTOKEN_EXPIRES_MS: "604800000"
 
 defaults:
   run:
-    working-directory: ./watcherz-api
+    working-directory: ./simplauth-api
 
 jobs:
   unit-tests:
@@ -33,13 +33,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: 'npm'
-          cache-dependency-path: './watcherz-api/package-lock.json'
+          cache-dependency-path: './simplauth-api/package-lock.json'
           
       - name: Install requirements
         run: npm ci
 
       - name: Prisma start
-        working-directory: ./watcherz-api
+        working-directory: ./simplauth-api
         run: npx prisma generate
         
       - name: Test
@@ -56,7 +56,7 @@ jobs:
         env:
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: watcherz_test
+          POSTGRES_DB: simplauth_test
         ports:
           - 5432:5432
         options: >-
@@ -73,7 +73,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: 'npm'
-          cache-dependency-path: './watcherz-api/package-lock.json'
+          cache-dependency-path: './simplauth-api/package-lock.json'
           
       - name: Install requirements
         run: npm ci

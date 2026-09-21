@@ -4,15 +4,15 @@ WORKDIR /app
 
 # Copiar as dependências de todos os workspaces para não dar invalidação de contrato (definido no package principal)
 COPY package*.json ./
-COPY watcherz-api/package*.json ./watcherz-api/
-COPY watcherz-web/package*.json ./watcherz-web/
+COPY simplauth-api/package*.json ./simplauth-api/
+COPY simplauth-web/package*.json ./simplauth-web/
 
 RUN npm ci
 
 COPY shared/ ./shared/
-COPY watcherz-api/ ./watcherz-api/
+COPY simplauth-api/ ./simplauth-api/
 
-WORKDIR /app/watcherz-api
+WORKDIR /app/simplauth-api
            
 RUN npx prisma generate
 RUN npx tsc --noEmit

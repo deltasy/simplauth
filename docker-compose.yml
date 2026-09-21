@@ -2,22 +2,22 @@ services:
   api:
     build:
       context: ./
-      dockerfile: ./watcherz-api/Dockerfile
-      
+      dockerfile: ./simplauth-api/Dockerfile
+
     ports:
       - "3000:3000"
 
     volumes:
-      - ./watcherz-api:/app/watcherz-api
-      - /app/watcherz-api/node_modules
+      - ./simplauth-api:/app/simplauth-api
+      - /app/simplauth-api/node_modules
 
     command: npm run dev:api
 
     env_file:
-      - ./watcherz-api/.env
+      - ./simplauth-api/.env
     environment:
-      - DATABASE_URL=${DATABASE_URL:-postgresql://docker:docker@postgres:5432/watcher-zero}
-      
+      - DATABASE_URL=${DATABASE_URL:-postgresql://docker:docker@postgres:5432/simplauth-zero}
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -27,7 +27,7 @@ services:
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: watcher-zero
+      POSTGRES_DB: simplauth-zero
 
     ports:
       - "5432:5432"
@@ -35,7 +35,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U docker -d watcher-zero"]
+      test: [ "CMD-SHELL", "pg_isready -U docker -d simplauth-zero" ]
       interval: 3s
       timeout: 5s
       retries: 5
