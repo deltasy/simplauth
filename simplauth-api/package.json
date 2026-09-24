@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -L --watch src --watch ../shared --ext ts,js,json --exec \"tsx src/server.ts\"",
+    "dev": "tsx src/server.ts",
     "test:unit": "vitest run --dir tests --config ./vitest.unit.config.ts",
     "test:integration:local": "dotenv -e .env.test -- prisma db push --accept-data-loss && dotenv -e .env.test -- vitest run --dir src/modules --config ./vitest.integration.config.ts",
     "test:integration:ci": "prisma db push --accept-data-loss && vitest run --dir src/modules --config ./vitest.integration.config.ts",

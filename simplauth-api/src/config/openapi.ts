@@ -31,7 +31,7 @@ export function generateOpenApiDocument(baseUrl: string) {
         openapi: "3.0.0",
         info: {
             version: "1.0.0",
-            title: "simplauthZ API",
+            title: "Simplauth API",
             description: "Documentação automatizada a partir de contratos Zod.",
         },
         servers: [
