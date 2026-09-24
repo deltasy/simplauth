@@ -7,6 +7,14 @@ services:
     ports:
       - "3000:3000"
 
+    volumes:
+      - ./simplauth-api:/app/simplauth-api
+      - /app/node_modules
+      - /app/simplauth-api/node_modules
+
+    working_dir: /app/simplauth-api
+    command: "npm run dev"
+
     env_file:
       - ./simplauth-api/.env
 

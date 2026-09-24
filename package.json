@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "docker compose up --build",
+    "build": "copy simplauth-api\\.env.example simplauth-api\\.env && copy simplauth-api\\.env.test.example simplauth-api\\.env.test && docker compose up --build",
+
     "dev": "docker compose up",
     "dev:web": "npm run dev -w simplauth-web",
-
     "actions": "git add . && git commit --amend --no-edit && git push --force-with-lease",
     "test:unit": "npm run test:unit -w simplauth-api",
     "test:integration:local": "npm run test:integration:local -w simplauth-api",
