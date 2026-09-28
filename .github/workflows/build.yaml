@@ -11,7 +11,6 @@ env:
   JWT_SECRET: "dummy"
   URL: "dummy"
   PORT: "3000"
-  DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/simplauth_test"
   JWT_ATOKEN_EXPIRES_IN: "1m"
   JWT_RTOKEN_EXPIRES_IN: "7d"
   JWT_RTOKEN_EXPIRES_MS: "604800000"
@@ -46,6 +45,9 @@ jobs:
         run: npm run test:unit
 
   integration-tests:
+    env:
+      DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/simplauth_test"
+
     name: Integration Tests
     needs: unit-tests
     runs-on: ubuntu-latest
