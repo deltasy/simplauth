@@ -1,5 +1,5 @@
 {
-  "name": "simplauth-api",
+  "name": "@simplauth/api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -34,6 +34,7 @@
     "vitest": "^5.0.0"
   },
   "dependencies": {
+    "@simplauth/shared": "*",
     "@asteasolutions/zod-to-openapi": "^9.1.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
@@ -47,5 +48,8 @@
     "pg": "^8.23.0",
     "swagger-jsdoc": "^6.3.0",
     "zod": "^4.6.5"
+  },
+  "directories": {
+    "test": "tests"
   }
 }

@@ -1,13 +1,7 @@
 {
   "name": "@simplauth/shared",
-  "private": true,
-
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts"
 }
