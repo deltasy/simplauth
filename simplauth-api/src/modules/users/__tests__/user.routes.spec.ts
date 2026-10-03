@@ -1,13 +1,12 @@
 import request from "supertest"
 import { test, expect, describe } from "vitest"
 
-import { app } from "../../../server.js"
+import { routesMetadataV1 } from "@simplauth/shared";
 
-import { memberUser, adminUser, createTestUser } from "../../../shared/__tests__/prisma.helper.js"
-import { signCatch } from "../../auth/__tests__/auth.routes.spec.js"
-import "../../../shared/__tests__/utils.js"
-
-import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+import { app } from "#server"
+import { memberUser, adminUser, createTestUser } from "#shared/__tests__/prisma.helper.js"
+import { signCatch } from "#auth/__tests__/auth.routes.spec.js"
+import "#shared/__tests__/utils.js"
 
 
 const { myUserRoute, userProfileRoute, userEditRoute, checkAttRoute, userDeleteRoute } = routesMetadataV1;

@@ -1,5 +1,6 @@
 import { Permission } from "@prisma/client";
-import { AuthService } from "../../modules/auth/auth.service.js";
+
+import { AuthService } from "#auth/auth.service.js";
 import { prisma } from "../database/prisma.service.js";
 
 export default async function () {

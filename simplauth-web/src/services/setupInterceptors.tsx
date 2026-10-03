@@ -3,10 +3,10 @@ import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
 import { api, standartURL } from "./api"; // Sua instância base
 
-import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
+import { routesMetadataV1 } from "@simplauth/shared";
 
-const { 
-    refreshRoute 
+const {
+  refreshRoute
 } = routesMetadataV1;
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -55,27 +55,27 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
 
-    if(!error.response) return;
+    if (!error.response) return;
 
     const { error: errorMessage } = error.response.data as any || '';
 
-    if(errorMessage && errorMessage.toLowerCase().includes("credenciais")) return Promise.reject(error);
+    if (errorMessage && errorMessage.toLowerCase().includes("credenciais")) return Promise.reject(error);
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
-        if(error.response)
+      if (error.response)
 
-      if (isRefreshing) {
-        return new Promise<string | null>((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            if (token) {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
-            }
-            return api(originalRequest);
+        if (isRefreshing) {
+          return new Promise<string | null>((resolve, reject) => {
+            failedQueue.push({ resolve, reject });
           })
-          .catch((err) => Promise.reject(err));
-      }
+            .then((token) => {
+              if (token) {
+                originalRequest.headers.Authorization = `Bearer ${token}`;
+              }
+              return api(originalRequest);
+            })
+            .catch((err) => Promise.reject(err));
+        }
 
       originalRequest._retry = true;
       isRefreshing = true;
@@ -83,12 +83,12 @@ api.interceptors.response.use(
       try {
         const { data } = await axios.get(
           standartURL + refreshRoute.raw,
-          { withCredentials: true } 
+          { withCredentials: true }
         );
 
         const newToken: string = data.token;
         setToken(newToken);
-        
+
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
 
         processQueue(null, newToken);

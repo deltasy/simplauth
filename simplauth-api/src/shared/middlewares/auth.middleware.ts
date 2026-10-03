@@ -1,10 +1,7 @@
 import type { Request, Response, NextFunction } from "express"
 
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import {
-    JWT_SECRET
-
-} from "../../config/env.js";
+import { JWT_SECRET } from "#config/env.js";
 
 interface TokenPayload {
     userId: string;

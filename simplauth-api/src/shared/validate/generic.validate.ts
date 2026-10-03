@@ -1,5 +1,5 @@
-import type { Request, Response, NextFunction } from "express"
 import { z } from "zod"
+import type { Request, Response, NextFunction } from "express"
 
 export function validate(schema: z.ZodType){
     return async (req: Request, res: Response, next: NextFunction) => {

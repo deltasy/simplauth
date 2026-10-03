@@ -1,11 +1,12 @@
 import express from "express"
 import { Permission } from "@prisma/client";
 
-import { AdminController } from "./admin.controller.js";
-import { auth } from "../../../shared/middlewares/auth.middleware.js";
-import { checkPermission } from "./middlewares/admin.middleware.js";
+import { routesMetadataV1 } from "@simplauth/shared";
 
-import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+import { AdminController } from "./admin.controller.js";
+
+import { checkPermission } from "./middlewares/admin.middleware.js";
+import { auth } from "#shared/middlewares/auth.middleware.js";
 
 
 const adminRouterV1 = express.Router();

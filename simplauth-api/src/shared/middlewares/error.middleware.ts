@@ -1,9 +1,11 @@
 import type { NextFunction, Request, Response } from "express"
-import { Prisma } from "@prisma/client";
-import { ENV_TYPE } from "../../config/env.js";
-
 import jwt from "jsonwebtoken"
 import { ZodError } from "zod";
+
+import { Prisma } from "@prisma/client";
+
+import { ENV_TYPE } from "#config/env.js";
+
 
 export const errorHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
 

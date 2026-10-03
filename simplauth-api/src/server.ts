@@ -1,21 +1,21 @@
 import express from "express"
-import { PORT } from "./config/env.js";
-
-import { errorHandler } from "./shared/middlewares/error.middleware.js";
-import { assertEnvironment } from "./shared/validate/environment.validate.js";
-
 import type { Request, Response } from "express"
 
 import cors from "cors"
 import cookieParser from 'cookie-parser';
 
+import type { Permission } from "@prisma/client";
 import { apiReference } from "@scalar/express-api-reference";
 import { scalarConfig } from "../scalar.config.js";
 
-import type { Permission } from "@prisma/client";
-import { generateOpenApiDocument } from "./config/openapi.js";
+import { PORT } from "#config/env.js";
+import { errorHandler } from "#shared/middlewares/error.middleware.js";
+import { assertEnvironment } from "#shared/validate/environment.validate.js";
+import { generateOpenApiDocument } from "#config/openapi.js";
 
-import versionV1 from "./shared/routes/v1.js";
+import versionV1 from "#shared/routes/v1.js";
+
+
 
 declare global {
     namespace Express {

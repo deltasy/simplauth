@@ -1,20 +1,18 @@
-import { registry } from "../../../config/openapi.js";
+import { registry } from "#config/openapi.js";
 import { z } from "zod";
 
-import { signUpResponseSchema } from "../../auth/auth.schema.js";
+import { routesMetadataV1 } from "@simplauth/shared";
 
-import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
-
+import { signUpResponseSchema } from "#auth/auth.schema.js";
 import { deletionConfirmSchema, editProfileSchema, selfProfileSchema } from "../user.schema.js";
+
+
 
 export default function registerUserDocs() {
     const { myUserRoute, userProfileRoute, userEditRoute, checkAttRoute, userDeleteRoute } = routesMetadataV1;
 
     const userDeletionRequest = registry.register("userDeletionRequest", deletionConfirmSchema);
-
     const editUserRequest = registry.register("editUserRequest", editProfileSchema);
-    const checkAttRequest = registry.register("checkUserAttributeRequest", editProfileSchema);
-
     const myUserResponse = registry.register("MyUserResponse", selfProfileSchema);
 
     // PERFIL PÚBLICO

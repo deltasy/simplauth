@@ -1,8 +1,10 @@
-import { Permission, type User } from "@prisma/client";
+import { Permission } from "@prisma/client";
+
 import { prisma } from "../database/prisma.service.js";
 import { randomUUID } from "node:crypto";
-import { AuthService } from "../../modules/auth/auth.service.js";
-import { userSchema } from "../../modules/users/user.schema.js";
+
+import { AuthService } from "#auth/auth.service.js";
+import { userSchema } from "#users/user.schema.js";
 
 export const memberUser = await createTestUser();
 export const adminUser = await createTestUser(Permission.ADMIN);

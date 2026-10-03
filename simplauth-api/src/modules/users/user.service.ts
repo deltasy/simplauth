@@ -1,8 +1,8 @@
-import { userDB } from "../../shared/database/prisma.service.js";
 import { Prisma } from "@prisma/client";
 
+import { userDB } from "#shared/database/prisma.service.js";
+import { AuthService } from "#auth/auth.service.js";
 import type { User } from "./user.schema.js";
-import { AuthService } from "../auth/auth.service.js";
 
 export const UserService = {
     // Fetch irrestrito (sem limitações) que só é usado para validações internas

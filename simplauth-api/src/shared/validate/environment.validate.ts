@@ -1,11 +1,12 @@
 import z from "zod";
+
 import {
     ENV_TYPE,
     DATABASE_URL,
     PORT,
     JWT_SECRET,
     JWT_ATOKEN_EXPIRES_IN, JWT_RTOKEN_EXPIRES_IN, JWT_RTOKEN_EXPIRES_MS
-} from "../../config/env.js";
+} from "#config/env.js";
 
 const envReady = z.object({
     ENV_TYPE: z.string(),

@@ -1,9 +1,9 @@
 import { api } from "./api";
 
-import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
+import { routesMetadataV1 } from "@simplauth/shared";
 
 
-const { 
+const {
     myUserRoute,
     checkAttRoute,
     userEditRoute,
@@ -15,57 +15,57 @@ type Permission = 'MEMBER' | 'ADMIN'
 export interface User {
     createdAt: string,
     email: string,
-    
+
     permission: Permission
     username: string | null
 }
 
 export const checkField = async (field: string, value: string): Promise<boolean> => {
-    try{
+    try {
         const response = await api.get(checkAttRoute.raw + `?${field}=${value}`);
         return response.data;
 
-    }catch(err){
+    } catch (err) {
         throw err;
     }
 }
 
 export const editField = async (field: string, value: string): Promise<boolean> => {
-    try{
+    try {
         console.log(field)
-        const response = await api.put(userEditRoute.raw, 
+        const response = await api.put(userEditRoute.raw,
             {
                 [field]: value
             },
-            { withCredentials: true } 
+            { withCredentials: true }
         );
-        
+
         console.log(`RESPONSE ${field} ${value}:`, response)
         return response.data;
 
-    }catch(err){
+    } catch (err) {
         throw err;
     }
 }
 
 export const getUserData = async (): Promise<User> => {
-    try{
+    try {
         const response = await api.get(myUserRoute.raw);
         return response.data;
 
-    }catch(err){
+    } catch (err) {
         throw err;
     }
 
 }
 
 export const getProfileData = async (username: string): Promise<User> => {
-    try{
+    try {
         console.log(username)
         const response = await api.get(userProfileRoute.raw + username);
         return response.data;
 
-    }catch(err){
+    } catch (err) {
         throw err;
     }
 

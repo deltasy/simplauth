@@ -1,15 +1,13 @@
 import type { NextFunction, Request, Response } from "express"
-
-import { AuthService } from "../../auth/auth.service.js";
-import { ENV_TYPE } from "../../../config/env.js";
-import { UserService } from "../user.service.js";
-
-
-import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
-
 import type { User } from "@prisma/client";
+
+import { routesMetadataV1 } from "@simplauth/shared";
+
+import { AuthService } from "#auth/auth.service.js";
+import { ENV_TYPE } from "#config/env.js";
+import { UserService } from "../user.service.js";
 import { editProfileSchema } from "../user.schema.js";
-import { ZodError } from "zod";
+
 
 export const UserController = {
     async fetchCurrentUser(req: Request, res: Response, next: NextFunction) {

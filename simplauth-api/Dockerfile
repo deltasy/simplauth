@@ -2,19 +2,23 @@ FROM node:26-alpine
 
 WORKDIR /app
 
-# Copiar as dependências de todos os workspaces para não dar invalidação de contrato (definido no package principal)
 COPY package*.json ./
-COPY simplauth-api/package*.json ./simplauth-api/
-COPY simplauth-web/package*.json ./simplauth-web/
+COPY ./simplauth-api/package.json ./simplauth-api/
+COPY ./shared/package.json ./shared/
 
 RUN npm ci
 
-COPY shared/ ./shared/
-COPY simplauth-api/ ./simplauth-api/
+COPY ./simplauth-api/ ./simplauth-api/
+COPY ./shared/ ./shared/
 
 WORKDIR /app/simplauth-api
-           
+
+
 RUN npx prisma generate
 RUN npx tsc --noEmit
 
-CMD ["npx", "tsx", "./src/server.ts"]
+RUN npm run build
+
+RUN npm prune --omit=dev
+
+CMD ["npm", "run", "start"]

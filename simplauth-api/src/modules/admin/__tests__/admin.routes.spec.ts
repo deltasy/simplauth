@@ -1,15 +1,15 @@
 import { test, expect, describe } from "vitest"
 import request from "supertest"
 
-import app from "../../../server.js"
+import app from "#server"
 
-import { extractTokens } from "../../../shared/__tests__/http.helper.js"
-import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
+import { extractTokens } from "#shared/__tests__/http.helper.js"
+import { routesMetadataV1 } from "@simplauth/shared";
 
 const { signInRoute, setCookieRoute, userDeleteRoute, userRestoreRoute } = routesMetadataV1;
 
-import { adminUser, createTestUser, memberUser } from "../../../shared/__tests__/prisma.helper.js";
-import { signCatch } from "../../auth/__tests__/auth.routes.spec.js";
+import { adminUser, createTestUser, memberUser } from "#shared/__tests__/prisma.helper.js";
+import { signCatch } from "#auth/__tests__/auth.routes.spec.js";
 
 
 describe("Pipeline: /set_cookie", () => {

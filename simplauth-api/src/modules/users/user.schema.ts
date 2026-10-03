@@ -1,6 +1,6 @@
+import { z } from "zod"
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { Permission } from "@prisma/client";
-import { z } from "zod"
 
 extendZodWithOpenApi(z);
 

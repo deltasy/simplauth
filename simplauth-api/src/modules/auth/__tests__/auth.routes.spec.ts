@@ -1,20 +1,20 @@
-import { app } from "../../../server.js"
+import { app } from "#server"
 import { describe, test, expect } from "vitest"
 
 import request from "supertest"
 
-import { JWT_SECRET } from "../../../config/env.js"
+import { routesMetadataV1 } from "@simplauth/shared";
+
+import { JWT_SECRET } from "#config/env.js"
 
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import { Permission } from "@prisma/client"
 import { randomUUID } from "node:crypto"
 
-import { extractTokens } from "../../../shared/__tests__/http.helper.js"
-import { memberUser, adminUser } from "../../../shared/__tests__/prisma.helper.js"
-import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
-
+import { extractTokens } from "#shared/__tests__/http.helper.js"
+import { memberUser, adminUser } from "#shared/__tests__/prisma.helper.js"
 import type { signRequest } from "../auth.schema.js"
-import "../../../shared/__tests__/utils.js"
+import "#shared/__tests__/utils.js"
 
 
 const { refreshRoute, signInRoute, signUpRoute, logoutRoute } = routesMetadataV1;

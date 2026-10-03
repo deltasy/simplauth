@@ -1,15 +1,16 @@
 import type { Request, Response, NextFunction } from "express";
 
+import { routesMetadataV1 } from "@simplauth/shared";
+
 import {
     JWT_RTOKEN_EXPIRES_MS,
     ENV_TYPE,
-} from "../../../config/env.js";
+} from "#config/env.js";
 
-import { UserService } from "../../users/user.service.js";
+
+import { UserService } from "#users/user.service.js";
 import { AuthService } from "../auth.service.js";
 
-
-import { routesMetadataV1 } from "../../../../../shared/src/routes/v1.metadata.js";
 
 
 export const AuthController = {
@@ -20,7 +21,7 @@ export const AuthController = {
         try {
             const newUser = await UserService.createUser(req.body);
             const { accessToken, refreshToken } = await AuthService.renewTokens(newUser.id)
-            
+
             setRefreshToken(res, refreshToken);
             return res.status(201).json({ id: newUser.id, token: accessToken });
 
@@ -39,7 +40,7 @@ export const AuthController = {
             }
 
             const { accessToken, refreshToken } = await AuthService.renewTokens(user.id, user.permission)
-            
+
             setRefreshToken(res, refreshToken);
             return res.status(200).json({ token: accessToken })
 
@@ -89,7 +90,7 @@ export const AuthController = {
     }
 };
 
-function setRefreshToken(res: Response, refreshToken: string){
+function setRefreshToken(res: Response, refreshToken: string) {
     return res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         path: routesMetadataV1.baseUrl,

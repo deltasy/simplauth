@@ -2,10 +2,10 @@ import axios, { AxiosError } from "axios";
 import { api, standartURL } from "./api";
 import { getToken, setToken } from "./setupInterceptors";
 
-import { routesMetadataV1 } from "../../../shared/src/routes/v1.metadata";
+import { routesMetadataV1 } from "@simplauth/shared";
 
-const { 
-    signInRoute, signUpRoute, logoutRoute, refreshRoute 
+const {
+    signInRoute, signUpRoute, logoutRoute, refreshRoute
 } = routesMetadataV1;
 
 export const signIn = async (email: string, password: string) => {
@@ -39,12 +39,12 @@ export const logout = async () => {
         const response = await api.post(
             logoutRoute.raw,
             {},
-            { withCredentials: true } 
+            { withCredentials: true }
         );
         return response.data;
 
     } catch (error) {
-        if(error instanceof AxiosError && error.response){
+        if (error instanceof AxiosError && error.response) {
             throw error.response.data;
         }
     }

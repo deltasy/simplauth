@@ -1,6 +1,7 @@
+import z from "zod"
+
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import type { HeadersObject } from "@asteasolutions/zod-to-openapi/dist/types.js";
-import z from "zod"
 
 extendZodWithOpenApi(z);
 

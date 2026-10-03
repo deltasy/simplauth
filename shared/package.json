@@ -1,7 +1,20 @@
 {
   "name": "@simplauth/shared",
   "version": "1.0.0",
-  "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts"
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup ./src --format esm && tsc",
+
+    "dev:js": "tsup ./src --format esm --watch",
+    "dev:types": "tsc --watch",
+    "dev": "npm run dev:js && dev:types"
+  },
+  "type": "module"
 }

@@ -4,17 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/server.ts",
+    "build": "tsup ./src --format esm",
+    "start": "node ./dist/server.js",
+
     "test:unit": "vitest run --dir tests --config ./vitest.unit.config.ts",
     "test:integration:local": "dotenv -e .env.test -- prisma db push --accept-data-loss && dotenv -e .env.test -- vitest run --dir src/modules --config ./vitest.integration.config.ts",
-    "test:integration:ci": "prisma db push --accept-data-loss && vitest run --dir src/modules --config ./vitest.integration.config.ts",
-    "start": "tsx ./src/server.ts",
-    "build": "npm install typescript tsx @types/node --save-dev & npx tsc --init & npm install prisma@7.10.0 @types/pg --save-dev & npm install @prisma/client@7.10.0 @prisma/adapter-pg pg dotenv"
+    "test:integration:ci": "prisma db push --accept-data-loss && vitest run --dir src/modules --config ./vitest.integration.config.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
+  "imports": {
+    "#shared/*": ["./src/shared/*"],
+    "#config/*": ["./src/config/*"],
+    "#server": ["./src/server.js"],
+    "#auth/*": ["./src/modules/auth/*"],
+    "#users/*": ["./src/modules/users/*"],
+    "#admin/*": ["./src/modules/admin/*"]
+  },
+
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
@@ -29,6 +38,7 @@
     "nodemon": "^3.1.14",
     "prisma": "^7.10.0",
     "supertest": "^7.2.2",
+    "tsup": "^8.5.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0"

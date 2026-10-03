@@ -3,13 +3,14 @@ FROM node:26-alpine
 WORKDIR /app
 
 COPY package*.json ./
-COPY simplauth-api/package*.json ./simplauth-api/
-COPY simplauth-web/package*.json ./simplauth-web/
+COPY ./simplauth-web/package.json ./simplauth-web/
+COPY ./shared/package.json ./shared/
 
-RUN npm ci
+RUN npm ci 
 
-COPY shared/ ./shared/
-COPY /simplauth-web ./simplauth-web
+COPY ./simplauth-web/ ./simplauth-web/
+COPY ./shared/ ./shared/
+
 
 WORKDIR /app/simplauth-web
 

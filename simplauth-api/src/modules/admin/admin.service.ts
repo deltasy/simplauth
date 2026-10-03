@@ -1,4 +1,4 @@
-import { userDB } from "../../shared/database/prisma.service.js";
+import { userDB } from "#shared/database/prisma.service.js";
 
 export const AdminService = {
     async restoreDeletedUser(username: string){

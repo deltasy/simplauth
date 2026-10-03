@@ -1,5 +1,6 @@
-import { Permission } from "@prisma/client"
 import type { Request, Response, NextFunction } from "express"
+
+import { Permission } from "@prisma/client"
 
 export function checkPermission(requiredPermission: Permission){
     return async (req: Request, res: Response, next: NextFunction) => {

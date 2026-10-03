@@ -1,18 +1,20 @@
-import {
-    JWT_SECRET,
-    JWT_ATOKEN_EXPIRES_IN,
-    JWT_RTOKEN_EXPIRES_IN,
-    JWT_RTOKEN_EXPIRES_MS
-} from "../../config/env.js";
-
-import { prisma, rTokenDB } from "../../shared/database/prisma.service.js";
 import { Permission } from "@prisma/client";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
-import { UserService } from "../users/user.service.js";
+import {
+    JWT_SECRET,
+    JWT_ATOKEN_EXPIRES_IN,
+    JWT_RTOKEN_EXPIRES_IN,
+    JWT_RTOKEN_EXPIRES_MS
+} from "#config/env.js";
+
+import { rTokenDB } from "#shared/database/prisma.service.js";
+import { UserService } from "#users/user.service.js";
+
+
 
 export const AuthService = {
     async fetchRefreshToken(token: string) {
