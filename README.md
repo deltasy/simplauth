@@ -42,7 +42,7 @@ O backend não utiliza *strings* fixas (hardcoded) para definir as rotas. Em vez
 Ao iniciar o backend, a documentação gerada automaticamente via Scalar (baseada nos schemas do Zod) fica disponível na rota de documentação:
 - **[http://localhost:3000/api/v1/docs](http://localhost:3000/api/v1/docs)**
 
-Lá você consegue visualizar os contratos, payloads esperados e até mesmo testar as chamadas direto pelo navegador.
+Lá você consegue visualizar os contratos, payloads esperados e testar as chamadas direto pelo navegador.
 
 ---
 
@@ -51,22 +51,26 @@ Lá você consegue visualizar os contratos, payloads esperados e até mesmo test
 Algumas escolhas que direcionaram o desenvolvimento:
 
 ### 1. RBAC (Role-Based Access Control) e permissões
-A aplicação implementa um controle de acesso baseado em papéis (RBAC). O modelo de usuário no banco conta com uma tabela de permissões (ex: `MEMBER` e `ADMIN`). A API protege as rotas verificando o nível de permissão do usuário de forma escalável, isolando as funcionalidades administrativas (como restauração de contas) apenas para quem tem o papel correto.
+A aplicação implementa um controle de acesso baseado em papéis (RBAC). O modelo de usuário no banco conta com uma tabela de permissões (ex: `MEMBER` e `ADMIN`). A API protege as rotas verificando o nível de permissão do usuário de forma escalável, isolando as funcionalidades administrativas (como restauração de contas) apenas para quem tem o papel correto, evitando intervenções mal intencionadas.
 
-### 2. Single Source of Truth (SSoT)
-Para evitar dessincronização, os contratos das rotas e schemas ficam no pacote compartilhado (`shared/src/routes/v1.metadata.ts`). Toda a validação das chamadas é feita via Zod. Qualquer mudança de rotas na API vai fazer o front, o back e a documentação atualizarem ao mesmo tempo.
-
-### 3. Autenticação e sessão
+### 2. Autenticação e sessão
 O fluxo utiliza Access Tokens e Refresh Tokens. Isso permite renovar a sessão do usuário sem obrigá-lo a logar de novo com frequência (renovação silenciosa), além de dar controle para revogar acessos remotamente, caso necessário.
 
-### 4. Documentação gerada pelo código
+### 3. Single Source of Truth (SSoT)
+Para evitar dessincronização, os contratos das rotas e schemas ficam no pacote compartilhado (`shared/src/routes/v1.metadata.ts`). Toda a validação das chamadas é feita via Zod. Qualquer mudança de rotas na API vai fazer o front, o back e a documentação atualizarem ao mesmo tempo.
+
+### 4. Documentação automática
 Aproveitando os schemas do Zod no pacote compartilhado, a documentação da API é gerada automaticamente usando o Scalar (`scalar.config.ts`). Com isso, a documentação reflete de forma exata o que o código faz, sem risco de ficar defasada.
 
-### 5. Integração contínua (CI)
-Existe um pipeline no GitHub Actions (`build.yaml`) configurado para rodar a cada push ou PR. Ele passa o linter (Oxlint) e roda a suíte de testes (Vitest) para barrar problemas antes de chegar na branch principal. São feitos testes unitários e de integração, nas quais todas as rotas são testadas (incluindo edge cases).
+### 5. Engenharia de plataforma
+O workspace **shared** é tratado como uma biblioteca interna chamada "**@simplauth/shared**", que é buildada durante o processo de desenvolvimento, evitando erros de tipagem do typescript.
+O projeto é um monorepo autêntico. Na prática, isso significa que os node_modules estão centralizados no root e cada workspace **(shared, simplauth-api, simplauth-web)** possui apenas um package.json que indica as dependências, além de aliases enxutos feitos para evitar excesso de caminhos relativos *(relative import hell)*
 
-### 6. Versionamento de API
-Desde o início, a API foi pensada com versionamento explícito (ex: `/api/v1`). A estrutura de pastas e arquivos reflete isso (como `v1.ts` e `v1.metadata.ts`). Essa prática garante que, se houver mudanças estruturais (breaking changes) no futuro, será possível subir uma `v2` sem quebrar os clientes que ainda consomem a versão anterior.
+### 6. Integração contínua (CI)
+Existe um pipeline no GitHub Actions (`build.yaml`) configurado para rodar a cada push ou PR. Ele roda testes unitários (Vitest) e de integração (Supertest) para barrar problemas antes de chegar na branch principal. Todas as rotas são testadas.
+
+### 7. Versionamento de API
+Desde o início, a API foi pensada com versionamento explícito (ex: `/api/v1`). Isso garante que, se houverem mudanças estruturais (breaking changes) no futuro, será possível subir uma `v2` sem quebrar os clientes que ainda consomem a versão anterior. Cada versão possui seus metadados (ex: `/api/v1/v1.metadata.ts`)
 
 ---
 
@@ -74,6 +78,11 @@ Desde o início, a API foi pensada com versionamento explícito (ex: `/api/v1`).
 
 ```text
 simplauth/
+│
+├── shared/                # Pacote compartilhado
+│   └── src/
+│       └── routes/        # v1.metadata.ts e validações Zod
+│
 ├── simplauth-api/         # Backend (Express + Prisma)
 │   ├── prisma/            # Schemas do banco (PostgreSQL)
 │   ├── src/               
@@ -85,10 +94,6 @@ simplauth/
 │   └── src/               
 │       ├── pages/         # Telas (Login, Register, Profile, etc)
 │       └── components/    # Componentes de interface
-│
-├── shared/                # Pacote compartilhado
-│   └── src/
-│       └── routes/        # v1.metadata.ts e validações Zod
 │
 ├── .github/workflows/     # Arquivos do GitHub Actions
 ├── docker-compose.yml     # Configuração do Docker
@@ -104,7 +109,7 @@ simplauth/
 - **Banco de dados:** PostgreSQL
 - **Validação:** Zod
 - **Frontend:** React 19, Vite, Tailwind CSS v4, Axios
-- **Testes e lint:** Vitest, Oxlint, GitHub Actions
+- **Testes:** Vitest (unitários), Supertest (integração), GitHub Actions (ci)
 - **Infraestrutura:** Docker, Docker Compose, NPM Workspaces
 
 ---
