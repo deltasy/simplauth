@@ -10,7 +10,7 @@
 </div>
 
 <p align="center">
-  <a href="README-pt.md">🇧🇷 Ler em Português</a>
+  <a href="README-PT.md">🇧🇷 Ler em Português</a>
 </p>
 
 <hr/>
