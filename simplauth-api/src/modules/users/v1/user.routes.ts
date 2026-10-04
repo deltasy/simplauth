@@ -32,7 +32,7 @@ userRouterV1.get(
     UserController.fetchUserProfile
 );
 
-// Para operações "críticas" de update e delete, se verifica o refreshToken
+// For "critical" update and delete operations, the refreshToken is verified
 userRouterV1.put(
     userEditRoute.relative,
     assertRefreshToken, validate(editProfileSchema),

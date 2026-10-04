@@ -43,7 +43,7 @@ export default function ReactiveInput({
                         >✓</button>
                     ) : (
                         <div className="text-red-500 font-medium mt-1">
-                            {placeholder} já existente
+                            {placeholder} already exists
                         </div>
                     )
                 ) : ""

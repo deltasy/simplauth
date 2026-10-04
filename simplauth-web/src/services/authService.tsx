@@ -52,7 +52,7 @@ export const logout = async () => {
 
 export async function restoreSession() {
     if (getToken()) {
-        return; // Já está autenticado
+        return; // Already authenticated
     }
 
     try {

@@ -15,23 +15,23 @@ export default function registerUserDocs() {
     const editUserRequest = registry.register("editUserRequest", editProfileSchema);
     const myUserResponse = registry.register("MyUserResponse", selfProfileSchema);
 
-    // PERFIL PÚBLICO
+    // PUBLIC PROFILE
     registry.registerPath({
         method: "get",
         path: userProfileRoute.relative_with_prefix + "{profile_name}",
-        summary: "Perfil público",
+        summary: "Public profile",
         tags: ["Users"],
         request: {
             params: z.object({
                 profile_name: z.string().openapi({
-                    description: "O nome de usuário (username) alvo da busca",
+                    description: "The target username for the search",
                     example: "member"
                 })
             })
         },
         responses: {
             200: {
-                description: "Perfil existente",
+                description: "Existing profile",
                 content: {
                     "application/json": {
                         schema: signUpResponseSchema,
@@ -39,21 +39,21 @@ export default function registerUserDocs() {
                 },
             },
             404: {
-                description: "Perfil inexistente"
+                description: "Non-existent profile"
             }
         },
     });
 
-    // USUÁRIO ATUAL
+    // CURRENT USER
     registry.registerPath({
         method: "get",
         path: myUserRoute.relative_with_prefix,
-        summary: "Usuário atual",
+        summary: "Current user",
         tags: ["Users"],
         security: [{ bearerAuth: [] }],
         responses: {
             200: {
-                description: "Dados obtidos",
+                description: "Data obtained",
                 content: {
                     "application/json": {
                         schema: myUserResponse,
@@ -61,16 +61,16 @@ export default function registerUserDocs() {
                 },
             },
             401: {
-                description: "Access Token inválido"
+                description: "Invalid Access Token"
             }
         },
     });
 
-    // ALTERAR USUÁRIO
+    // EDIT USER
     registry.registerPath({
         method: "put",
         path: userEditRoute.relative_with_prefix,
-        summary: "Editar conta",
+        summary: "Edit account",
         tags: ["Users"],
         request: {
             body: {
@@ -83,22 +83,22 @@ export default function registerUserDocs() {
         },
         responses: {
             200: {
-                description: "Campos alterados com sucesso"
+                description: "Fields changed successfully"
             },
             401: {
-                description: "Token inválido ou expirado"
+                description: "Invalid or expired token"
             },
             422: {
-                description: "Campos mal-formatados ou inválidos"
+                description: "Badly formatted or invalid fields"
             }
         },
     });
 
-    // DELETAR USUÁRIO
+    // DELETE USER
     registry.registerPath({
         method: "delete",
         path: userDeleteRoute.relative_with_prefix,
-        summary: "Deletar conta",
+        summary: "Delete account",
         tags: ["Users"],
         request: {
             body: {
@@ -111,13 +111,13 @@ export default function registerUserDocs() {
         },
         responses: {
             200: {
-                description: "Usuário deletado com sucesso"
+                description: "User deleted successfully"
             },
             401: {
-                description: "Token inválido ou expirado"
+                description: "Invalid or expired token"
             },
             422: {
-                description: "Confirmação inválida"
+                description: "Invalid confirmation"
             }
         },
     });
@@ -126,7 +126,7 @@ export default function registerUserDocs() {
     registry.registerPath({
         method: "get",
         path: checkAttRoute.relative_with_prefix,
-        summary: "Checar atributo",
+        summary: "Check attribute",
         tags: ["Utils"],
         security: [{ cookieAuth: [] }],
         request: {
@@ -134,10 +134,10 @@ export default function registerUserDocs() {
         },
         responses: {
             200: {
-                description: "Disponível"
+                description: "Available"
             },
             409: {
-                description: "Indisponível (Já existe)"
+                description: "Unavailable (Already exists)"
             }
         },
     });

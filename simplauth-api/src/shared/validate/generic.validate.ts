@@ -8,7 +8,7 @@ export function validate(schema: z.ZodType){
             return res.status(422).json(result.error.issues);
         }
 
-        // req.body é sobrescrito para garantir a sanitização feita pelo ZOD
+        // req.body is overwritten to ensure sanitization by ZOD
         req.body = result.data;
         return next();
     }

@@ -8,7 +8,7 @@ import { AuthService } from "../src/modules/auth/auth.service.js"
 
 
 
-test("Geração de token de MEMBRO", () => {
+test("MEMBER token generation", () => {
     const token = AuthService.generateToken("UUID-123456", "7d")
     const parsedToken = jwt.verify(token, JWT_SECRET as jwt.Secret) as jwt.JwtPayload
 
@@ -17,10 +17,10 @@ test("Geração de token de MEMBRO", () => {
     expect(userId).toBe("UUID-123456")
 })
 
-test("Geração de token de ADMIN", () => {
+test("ADMIN token generation", () => {
     const token = AuthService.generateToken("UUID-123456", "7d", Permission.ADMIN)
     const parsedToken = jwt.verify(token, JWT_SECRET as jwt.Secret) as jwt.JwtPayload
 
-    // A informação de "Admin" deve ser conservada ao decodificar o token
+    // "Admin" information must be preserved when decoding the token
     expect(parsedToken.permission).toBe("ADMIN")
 })

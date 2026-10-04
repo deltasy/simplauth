@@ -32,12 +32,12 @@ export function generateOpenApiDocument(baseUrl: string) {
         info: {
             version: "1.0.0",
             title: "Simplauth API",
-            description: "Documentação automatizada a partir de contratos Zod.",
+            description: "Automated documentation from Zod contracts.",
         },
         servers: [
             {
                 url: `http://localhost:${PORT}${baseUrl}`,
-                description: "Servidor local (V1)",
+                description: "Local server (V1)",
             },
         ],
     });

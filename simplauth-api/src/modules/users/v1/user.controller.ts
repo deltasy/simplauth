@@ -33,7 +33,7 @@ export const UserController = {
             );
 
             if (!data) {
-                return res.status(404).send({ error: "Esse usuário não existe" });
+                return res.status(404).send({ error: "This user does not exist" });
             }
 
             return res.status(200).json(data);
@@ -46,26 +46,26 @@ export const UserController = {
     
     async verifyAttribute(req: Request, res: Response, next: NextFunction) {
         try {
-            if(!req.query) return res.status(422).json({error: "Atributos não especificados"});
+            if(!req.query) return res.status(422).json({error: "Attributes not specified"});
 
             const { username, email } = editProfileSchema.parse(req.query);
 
-            if(username === "" || email === "") return res.status(422).json({error: "Atributos não especificados"});
+            if(username === "" || email === "") return res.status(422).json({error: "Attributes not specified"});
 
             if(username){
                 const data = await UserService.fetchUser({ username: username });
-                if(!data) return res.status(200).json({message: "Disponível!"});
+                if(!data) return res.status(200).json({message: "Available!"});
 
             }
             
             if(email){
                 const data = await UserService.fetchUser({ email: email })
-                if(!data) return res.status(200).json({message: "Disponível!"});
+                if(!data) return res.status(200).json({message: "Available!"});
             }
 
 
 
-            return res.status(409).json({ error: "Já existente" });
+            return res.status(409).json({ error: "Already exists" });
 
         } catch (error) {
             next(error);
@@ -75,7 +75,7 @@ export const UserController = {
     async editCurrentUser(req: Request, res: Response, next: NextFunction) {
         try {
             await UserService.editCurrentUser(req.userId!, req.body);
-            return res.status(200).json({ message: "Campos alterados com sucesso" });
+            return res.status(200).json({ message: "Fields changed successfully" });
 
         } catch (error) {
             next(error);
@@ -84,7 +84,7 @@ export const UserController = {
 
     async deleteCurrentUser(req: Request, res: Response, next: NextFunction) {
         try {
-            // Revogar refresh token
+            // Revoke refresh token
             const token = req.cookies?.refreshToken;
             await AuthService.revokeRefreshToken(token);
             res.cookie("refreshToken", '', {
@@ -96,7 +96,7 @@ export const UserController = {
             });
 
             await UserService.deleteCurrentUser(req.userId!);
-            return res.status(200).json({ message: "Conta deletada com sucesso" });
+            return res.status(200).json({ message: "Account deleted successfully" });
 
         } catch (error) {
             next(error);

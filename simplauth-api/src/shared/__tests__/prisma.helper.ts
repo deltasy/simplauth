@@ -26,6 +26,6 @@ export async function createTestUser(permission?: Permission){
         }
     })
 
-    // Objeto usuário
+    // User object
     return userSchema.parse(userPayload)
 }

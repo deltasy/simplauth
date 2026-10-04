@@ -34,7 +34,7 @@ describe("Pipeline: /set_cookie", () => {
         expect(newRefreshToken).toBe(newValue);
     });
 
-    test("Permissões insuficientes", async () => {
+    test("Insufficient permissions", async () => {
         // Login
         const loginResponse = await request(app).post(signInRoute.raw).send(memberUser);
         expect(loginResponse.status).toBe(200);
@@ -53,19 +53,19 @@ describe("Pipeline: /set_cookie", () => {
 
 describe("Pipeline: /user_restore", () => {
     test("OK", async () => {
-        // Deletar
+        // Delete
         const deletedUser = await createTestUser();
         const { accessToken: aTokenMember, refreshToken: rTokenMember }
             = await signCatch("sign-in", deletedUser);
 
         const deleteResponse = await request(app).delete(userDeleteRoute.raw)
-            .send({ delete: "confirmar" }).withAuth(aTokenMember, rTokenMember);
+            .send({ delete: "confirm" }).withAuth(aTokenMember, rTokenMember);
         expect(deleteResponse.status).toBe(200);
 
         const { response: signInTryResponse } = await signCatch("sign-in", deletedUser);
         expect(signInTryResponse.status).toBe(401);
 
-        // Restaurar
+        // Restore
         const { accessToken: aTokenAdmin, refreshToken: rTokenAdmin }
             = await signCatch("sign-in", adminUser);
 
@@ -80,7 +80,7 @@ describe("Pipeline: /user_restore", () => {
         expect(response.status).toBe(200);
     });
 
-    test("Permissões insuficientes", async () => {
+    test("Insufficient permissions", async () => {
         const { accessToken, refreshToken } = await signCatch("sign-in", memberUser);
 
         const invalidAdminResponse = await request(app)

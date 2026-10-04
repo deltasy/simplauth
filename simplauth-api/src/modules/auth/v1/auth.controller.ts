@@ -36,7 +36,7 @@ export const AuthController = {
 
             const user = await AuthService.verifyPassword(email, password);
             if (!user) {
-                return res.status(401).json({ error: "Credenciais inválidas" })
+                return res.status(401).json({ error: "Invalid credentials" })
             }
 
             const { accessToken, refreshToken } = await AuthService.renewTokens(user.id, user.permission)
@@ -56,9 +56,9 @@ export const AuthController = {
                 await AuthService.revokeRefreshToken(token)
                 res.clearCookie("refreshToken");
 
-            } catch (error) { } // Se o token era inválido, ignore. Deslogue mesmo assim
+            } catch (error) { } // If the token was invalid, ignore. Logout anyway
 
-            return res.status(200).json({ message: "Deslogado com sucesso" });
+            return res.status(200).json({ message: "Logged out successfully" });
 
         } catch (error) {
             next(error)
@@ -67,10 +67,10 @@ export const AuthController = {
 
     async renewTokens(req: Request, res: Response, next: NextFunction) {
         try {
-            // "userId" e "permission" obtidos pelo assertRefreshToken (middleware de refresh token)
+            // "userId" and "permission" obtained by assertRefreshToken (refresh token middleware)
             const user = await UserService.fetchUser({ id: req.userId as string, is_deleted: false });
             if (!user) {
-                return res.status(401).json({ error: "Usuário não encontrado ou deletado" });
+                return res.status(401).json({ error: "User not found or deleted" });
             }
 
             const { accessToken, refreshToken } = await AuthService.renewTokens(
@@ -83,7 +83,7 @@ export const AuthController = {
             return res.status(200).json({ token: accessToken })
 
         } catch (error: any) {
-            if (error.message === "CE-1") res.status(403); // Tentativa de reutilização de token
+            if (error.message === "CE-1") res.status(403); // Attempt to reuse token
 
             next(error)
         }

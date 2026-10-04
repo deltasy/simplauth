@@ -41,14 +41,14 @@ export default function Login() {
                 placeholder="E-mail" setFunction={setEmail} />
 
                 <Input field="password" value={password} type="password" 
-                placeholder="Senha" setFunction={setPassword} />
+                placeholder="Password" setFunction={setPassword} />
 
             </div>
             <div className="bg-slate-700 p-4 text-white flex flex-col gap-2">
                 <button type="submit" className="bg-cyan-500 w-25 font-bold disabled:bg-cyan-500/40 disabled:text-slate-300 px-4 py-2 rounded cursor-pointer disabled:cursor-not-allowed" disabled={isSubmiting}>
-                    Logar
+                    Login
                 </button>
-                <a href="/register">Não tem uma conta? registre-se</a>
+                <a href="/register">Don't have an account? Register</a>
             </div>
         </form>
 

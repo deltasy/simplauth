@@ -18,13 +18,13 @@ export default function registerAuthDocs() {
     // --------------------------------------------------------------------------
 
 
-    //// DOCUMENTAÇÃO
+    //// DOCUMENTATION
 
-    // REGISTRO
+    // REGISTER
     registry.registerPath({
         method: "post",
         path: signUpRoute.relative_with_prefix,
-        summary: "Registro",
+        summary: "Register",
         tags: ["Auth"],
         request: {
             body: {
@@ -37,7 +37,7 @@ export default function registerAuthDocs() {
         },
         responses: {
             201: {
-                description: "Usuário registrado",
+                description: "User registered",
                 headers: refreshTokenCookie,
                 content: {
                     "application/json": {
@@ -46,13 +46,13 @@ export default function registerAuthDocs() {
                 },
             },
             401: {
-                description: "Credenciais inválidas",
+                description: "Invalid credentials",
             },
             409: {
-                description: "Registro duplicado"
+                description: "Duplicate registration"
             },
             422: {
-                description: "Campos mal formatados"
+                description: "Badly formatted fields"
             }
         },
     });
@@ -74,7 +74,7 @@ export default function registerAuthDocs() {
         },
         responses: {
             200: {
-                description: "Autenticação confirmada",
+                description: "Authentication confirmed",
                 headers: refreshTokenCookie,
                 content: {
                     "application/json": {
@@ -83,7 +83,7 @@ export default function registerAuthDocs() {
                 },
             },
             401: {
-                description: "Credenciais inválidas",
+                description: "Invalid credentials",
             },
         },
     });
@@ -97,7 +97,7 @@ export default function registerAuthDocs() {
         request: {},
         responses: {
             200: {
-                description: "Deslogado com sucesso"
+                description: "Logged out successfully"
             }
         },
     });
@@ -106,12 +106,12 @@ export default function registerAuthDocs() {
     registry.registerPath({
         method: "get",
         path: refreshRoute.relative_with_prefix,
-        summary: "Renovação de token",
+        summary: "Token renewal",
         tags: ["Auth"],
         security: [{ cookieAuth: [] }],
         responses: {
             200: {
-                description: "Refresh Token + Access Token renovados",
+                description: "Refresh Token + Access Token renewed",
                 headers: refreshTokenCookie,
                 content: {
                     "application/json": {
@@ -120,7 +120,7 @@ export default function registerAuthDocs() {
                 },
             },
             403: {
-                description: "Credenciais atuais inválidas para renovação"
+                description: "Current credentials invalid for renewal"
             }
         },
     });

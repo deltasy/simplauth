@@ -14,13 +14,13 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers['authorization'];
 
         if (!(authHeader && authHeader.startsWith("Bearer "))) {
-            return res.status(401).json({ error: "Token inválido ou expirado." });
+            return res.status(401).json({ error: "Invalid or expired token." });
         }
 
         let token = authHeader.split(" ")[1];
 
         if (!token) {
-            return res.status(401).json({ error: "Token inválido ou expirado." });
+            return res.status(401).json({ error: "Invalid or expired token." });
         }
 
         const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret) as JwtPayload
@@ -29,7 +29,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
         return next();
     } catch (error) {
-        return res.status(401).json({ error: "Token inválido ou expirado." });
+        return res.status(401).json({ error: "Invalid or expired token." });
     }
 };
 
@@ -37,12 +37,12 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
     try {
         const authHeader = req.headers['authorization'];
 
-        // Anônimo
+        // Anonymous
         if (!(authHeader && authHeader.startsWith("Bearer "))) {
             return next();
         }
 
-        // Anônimo
+        // Anonymous
         const token = authHeader.split(" ")[1];
 
         if (!token) {
@@ -54,7 +54,7 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
 
         return next();
     } catch (error) {
-        return res.status(401).json({ error: "Token inválido ou expirado." });
+        return res.status(401).json({ error: "Invalid or expired token." });
     }
 };
 

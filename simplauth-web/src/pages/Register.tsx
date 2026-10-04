@@ -38,14 +38,14 @@ export default function Register() {
                 placeholder="E-mail" setFunction={setEmail} />
 
                 <Input field="password" value={password} type="password" 
-                placeholder="Senha" setFunction={setPassword} />
+                placeholder="Password" setFunction={setPassword} />
 
             </div>
             <div className="bg-slate-700 p-4 text-white flex flex-col gap-2">
                 <button type="submit" className="bg-cyan-500 font-bold w-40 disabled:bg-cyan-500/40 disabled:text-slate-300 px-4 py-2 rounded cursor-pointer disabled:cursor-not-allowed" disabled={isSubmiting}>
-                    Registrar-se
+                    Register
                 </button>
-                <a href="/login">Já tenho uma conta</a>
+                <a href="/login">Already have an account</a>
             </div>
         </form>
 

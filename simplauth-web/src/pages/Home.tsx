@@ -30,7 +30,7 @@ export default function Home() {
 
         }).catch(err => {
             console.log(err);
-            navigate('/') // Voltar para área inicial
+            navigate('/') // Go back to the initial area
 
         });
     }, []);
@@ -57,7 +57,7 @@ export default function Home() {
                 setValidUsername(false);
             }
             
-        }else{ // Sem alteração
+        }else{ // No change
             setValidUsername(false);
         }
         setUsername(newUsername);
@@ -71,10 +71,10 @@ export default function Home() {
                 await checkField("email", newEmail);
                 setValidEmail(true);
 
-            }catch(error){ // Já existente
+            }catch(error){ // Already exists
                 setValidEmail(false);
             }
-        }else{ // Sem alterações
+        }else{ // No change
             setValidEmail(false);
         }
 
@@ -105,10 +105,10 @@ export default function Home() {
 
     return (
         <>
-            <button onClick={handleLogout} className="m-5 bg-red-500 w-25 font-bold px-4 py-2 rounded cursor-pointer">Deslogar</button>
+            <button onClick={handleLogout} className="m-5 bg-red-500 w-25 font-bold px-4 py-2 rounded cursor-pointer">Logout</button>
 
             <div className="bg-gray-600 text-white p-10">
-                <h1 className="text-xl font-bold mb-6">Dados:</h1>
+                <h1 className="text-xl font-bold mb-6">Data:</h1>
 
                 <ul className="flex flex-col gap-3">
                     <li>
@@ -121,7 +121,7 @@ export default function Home() {
                                 {
                                     emailChanged ? (
                                         <div className="text-green-500 font-medium mt-1">
-                                            E-mail alterado com sucesso
+                                            E-mail changed successfully
                                         </div>
                                     ) : ""
                                 }
@@ -137,14 +137,14 @@ export default function Home() {
                                 {
                                     usernameChanged ? (
                                         <div className="text-green-500 font-medium mt-1">
-                                            Nickname alterado com sucesso
+                                            Nickname changed successfully
                                         </div>
                                     ) : ""
                                 }
                             </ReactiveInput>
                     </li>
                     <li>
-                        <b>Permissão</b>:
+                        <b>Permission</b>:
                         <br/>{thisUser.permission}
                     </li>
                 </ul>

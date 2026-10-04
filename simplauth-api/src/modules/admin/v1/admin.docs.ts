@@ -17,7 +17,7 @@ export default function registerAdminDocs() {
     registry.registerPath({
         method: "post",
         path: setCookieRoute.relative_with_prefix,
-        summary: "Setar refresh cookie",
+        summary: "Set refresh cookie",
         tags: ["ADMIN"],
         security: [{ bearerAuth: [], cookieAuth: [] }],
         request: {
@@ -34,22 +34,22 @@ export default function registerAdminDocs() {
         responses: {
             200: {
                 headers: refreshTokenCookie,
-                description: "Refresh cookie setado",
+                description: "Refresh cookie set",
             },
             401: {
-                description: "Token inválido ou expirado",
+                description: "Invalid or expired token",
             },
             403: {
-                description: "Permissões insuficientes"
+                description: "Insufficient permissions"
             }
         },
     });
 
-    // Restaurar usuário deletado
+    // Restore deleted user
     registry.registerPath({
         method: "post",
         path: userRestoreRoute.relative_with_prefix,
-        summary: "Restaurar usuário",
+        summary: "Restore user",
         tags: ["ADMIN"],
         security: [{ bearerAuth: [] }],
         request: {
@@ -63,13 +63,13 @@ export default function registerAdminDocs() {
         },
         responses: {
             200: {
-                description: "Usuário restaurado (DELETE revertido)"
+                description: "User restored (DELETE reverted)"
             },
             403: {
-                description: "Permissões insuficientes"
+                description: "Insufficient permissions"
             },
             404: {
-                description: "Usuário deletado inexistente"
+                description: "Deleted user non-existent"
             }
         },
     });

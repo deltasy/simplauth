@@ -21,20 +21,20 @@ export const AdminController = {
                 maxAge: JWT_RTOKEN_EXPIRES_MS
             });
 
-            return res.status(200).send({ message: "Cookie setado" });
+            return res.status(200).send({ message: "Cookie set" });
 
         } catch (error) {
             next(error);
         }
     },
 
-    // Reverter conta que foi deletada
+    // Revert account that was deleted
     async restoreDeletedUser(req: Request, res: Response, next: NextFunction) {
         try {
             const { username } = req.body;
             await AdminService.restoreDeletedUser(username);
 
-            return res.status(200).json({ message: `Usuário ${username} foi restaurado` });
+            return res.status(200).json({ message: `User ${username} was restored` });
 
         } catch (error) {
             next(error);

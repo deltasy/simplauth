@@ -2,7 +2,7 @@ import { defineRoute } from "./utils/defineRoute.js";
 
 const baseUrl = "/api/v1";
 
-// Afixos
+// Affixes
 const authPrefix = "/auth";
 const usersPrefix = "/users";
 const adminPrefix = "/admin";

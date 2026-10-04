@@ -5,10 +5,10 @@ export default defineConfig({
         fileParallelism: false,
         isolate: false,
         
-        // Roda UMA VEZ no processo pai
+        // Runs ONCE in the parent process
         globalSetup: ['./src/shared/__tests__/global.setup.ts'],
         
-        // Injetado em CADA arquivo de teste
+        // Injected in EVERY test file
         setupFiles: ['./src/shared/__tests__/worker.setup.ts'],
 
         reporters: ['verbose']

@@ -5,7 +5,7 @@ import { AuthService } from "#auth/auth.service.js";
 import type { User } from "./user.schema.js";
 
 export const UserService = {
-    // Fetch irrestrito (sem limitações) que só é usado para validações internas
+    // Unrestricted fetch (no limitations) that is only used for internal validations
     async fetchUser(whereArg: Prisma.UserWhereInput) {
         return await userDB.findFirst({
             where: whereArg
@@ -23,7 +23,7 @@ export const UserService = {
         });
     },
 
-    // Fetch padrão que não mostra dados sensíveis
+    // Default fetch that doesn't show sensitive data
     async fetchUserProfile(whereArg: Prisma.UserWhereInput) {
         return await userDB.findFirst({
             where: whereArg,

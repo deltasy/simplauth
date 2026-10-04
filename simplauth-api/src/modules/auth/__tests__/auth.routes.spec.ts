@@ -34,11 +34,11 @@ describe("Pipeline: /sign-up", () => {
         const { id: userId, token: accessToken } = response.body;
         const validToken = jwt.verify(accessToken, JWT_SECRET as jwt.Secret) as JwtPayload;
 
-        expect(validToken.userId).toBe(userId); // Token válido
+        expect(validToken.userId).toBe(userId); // Valid token
     })
 
 
-    test("Registro duplicado", async () => {
+    test("Duplicate registration", async () => {
         const newUserEmail = `test-${randomUUID()}@gmail.com`
 
         await signCatch("sign-up", {
@@ -53,8 +53,8 @@ describe("Pipeline: /sign-up", () => {
     })
 
 
-    test("Requisição inválida", async () => {
-        // E-mail inválido
+    test("Invalid request", async () => {
+        // Invalid email
         const { response: invalidEmailResponse } = await signCatch("sign-up", {
             "email": "email",
             "password": memberUser.password
@@ -76,12 +76,12 @@ describe("Pipeline: /sign-in", () => {
 
         const validAccessToken = jwt.verify(accessToken, JWT_SECRET as jwt.Secret) as JwtPayload;
         expect(validAccessToken).toBeDefined();
-        expect(validAccessToken.jti).toBeUndefined(); // jti indefinido
-        expect(validAccessToken.permission).toBeUndefined(); // O usuário não é admin, logo não tem o campo "permissão" no payload
+        expect(validAccessToken.jti).toBeUndefined(); // undefined jti
+        expect(validAccessToken.permission).toBeUndefined(); // The user is not admin, so there is no "permission" field in the payload
 
         const validRefreshToken = jwt.verify(refreshToken, JWT_SECRET as jwt.Secret) as JwtPayload;
         expect(validRefreshToken).toBeDefined();
-        expect(validRefreshToken.jti).toBeDefined(); // jti definido (é exclusivo dos refresh tokens)
+        expect(validRefreshToken.jti).toBeDefined(); // defined jti (exclusive to refresh tokens)
     })
 
     test("OK (ADMIN)", async () => {
@@ -89,15 +89,15 @@ describe("Pipeline: /sign-in", () => {
         expect(response.status).toBe(200);
 
         const validAccessToken = jwt.verify(accessToken, JWT_SECRET as jwt.Secret) as JwtPayload;
-        expect(validAccessToken.permission).toBe(Permission.ADMIN); // O usuário é admin, logo o campo "permissão" existe
+        expect(validAccessToken.permission).toBe(Permission.ADMIN); // The user is admin, so the "permission" field exists
     })
 
-    test("Inválido", async () => {
+    test("Invalid", async () => {
         const { response } = await signCatch("sign-in", {
             "email": "not_registered@gmail.com",
             "password": "12345"
         });;
-        expect(response.status).toBe(401); // NÃO AUTORIZADO
+        expect(response.status).toBe(401); // UNAUTHORIZED
     })
 })
 
@@ -106,7 +106,7 @@ describe("Pipeline: /refresh", () => {
         // Login
         const { accessToken: AToken1, refreshToken: RToken1 } = await signCatch("sign-in", memberUser);
 
-        // 1ª Rotação de tokens
+        // 1st Token rotation
         const refreshResponse1 = await request(app)
             .get(refreshRoute.raw).withAuth(AToken1, RToken1);
 
@@ -115,30 +115,30 @@ describe("Pipeline: /refresh", () => {
 
         const { accessToken: AToken2, refreshToken: RToken2 } = extractTokens(refreshResponse1);
 
-        // 2ª Rotação de tokens
+        // 2nd Token rotation
         const refreshResponse2 = await request(app)
             .get(refreshRoute.raw).withAuth(AToken2, RToken2);
 
         expect(refreshResponse2.status).toBe(200);
     });
 
-    test("Reuso de tokens", async () => {
+    test("Token reuse", async () => {
         // Login
         const { accessToken: AToken1, refreshToken: RToken1 } = await signCatch("sign-in", memberUser);
 
-        // Rotação de tokens
+        // Token rotation
         const validRefreshResponse = await request(app)
             .get(refreshRoute.raw).withAuth(AToken1, RToken1);
 
         const { accessToken: AToken2, refreshToken: RToken2 } = extractTokens(validRefreshResponse);
 
-        // Reuso de tokens (usuário malicioso)
+        // Token reuse (malicious user)
         const attackResponse = await request(app)
             .get(refreshRoute.raw).withAuth(AToken1, RToken1);
 
         expect(attackResponse.status).toBe(403);
 
-        // 2ª Rotação de tokens (Dará erro. Por motivos de segurança, o usuário legítimo também é desconectado)
+        // 2nd Token rotation (Will fail. For security reasons, the legitimate user is also disconnected)
         const victimResponse = await request(app)
             .get(refreshRoute.raw).withAuth(AToken2, RToken2);
 
@@ -155,7 +155,7 @@ describe("Pipeline: /logout", () => {
 
         expect(logoutResponse.status).toBe(200);
 
-        // Tentativa de refresh de token (Será inválida, pois quando o usuário desloga, o refreshToken é queimado)
+        // Token refresh attempt (Will be invalid, since when the user logs out, the refreshToken is burned)
         const refreshResponse = await request(app)
             .get(refreshRoute.raw).withAuth(accessToken, refreshToken);
 

@@ -20,7 +20,7 @@ export default function Profile() {
     if(!user) return (
         <div className="flex flex-col gap-1 font-bold p-6 text-red-500">
             <span className="text-6xl">404</span>
-            Usuário não encontrado
+            User not found
         </div>
     );
 
@@ -28,14 +28,14 @@ export default function Profile() {
 
     return (
         <div className="bg-black text-white p-6">
-            <h1 className="mb-2 font-bold text-xl">PERFIL PÚBLICO:</h1> 
+            <h1 className="mb-2 font-bold text-xl">PUBLIC PROFILE:</h1> 
             <ul className="flex flex-col gap-2 mt-6">
                 <li>
                     <h2 className="text-md font-semibold">Nickname:</h2> 
                     {user.username}
                 </li>
                 <li>
-                    <h2 className="text-md font-semibold">Data de registro:</h2> 
+                    <h2 className="text-md font-semibold">Registration date:</h2> 
                     {creationDate[2] + "/" + creationDate[1] + "/" + creationDate[0]}
                 </li>
             </ul>

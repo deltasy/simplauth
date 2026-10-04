@@ -8,7 +8,7 @@ extendZodWithOpenApi(z);
 
 export const refreshTokenCookie = {
     "Set-Cookie": {
-        description: "Refresh Token em cookie HTTP-only",
+        description: "Refresh Token in HTTP-only cookie",
         schema: {type: "string"}
     }
 } as HeadersObject;
@@ -20,22 +20,22 @@ export const tokenResponseSchema = z.object({
 
 
 export const signRequestSchema = z.object({
-    email: z.string().includes("@", {error: "E-mail inválido"})
-    .endsWith(".com", {error: "E-mail inválido"})
+    email: z.string().includes("@", {error: "Invalid e-mail"})
+    .endsWith(".com", {error: "Invalid e-mail"})
     .openapi({example: "fulano@gmail.com"}),
 
-    password: z.string({error: "Apenas texto é permitido"}
-    ).min(4, "Senha muito curta").max(15, "Senha muito grande").openapi({example: "senha123"}),
+    password: z.string({error: "Only text is allowed"}
+    ).min(4, "Password too short").max(15, "Password too long").openapi({example: "senha123"}),
 
-    username: z.string({error: "Apenas texto é permitido"})
-    .min(4, "Nickname muito curto").max(12, "Nickname muito grande").optional().openapi({example: "Usuario42"}),
+    username: z.string({error: "Only text is allowed"})
+    .min(4, "Nickname too short").max(12, "Nickname too long").optional().openapi({example: "Usuario42"}),
 });
 export type signRequest = z.infer<typeof signRequestSchema>
 
 
 
 export const signUpResponseSchema = z.object({
-    id: z.string().openapi({description: "ID do usuário", example:"6c9af062-c6b7-48f8-b77a-813810ad3919"}),
+    id: z.string().openapi({description: "User ID", example:"6c9af062-c6b7-48f8-b77a-813810ad3919"}),
     access_token: z.string().openapi({description: "Access Token", example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."})
 })
 

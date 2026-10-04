@@ -71,10 +71,10 @@ export const AuthService = {
         const payLoad = {
             userId: id,
 
-            // Permissão, opcional (aplicado apenas se o usuário for ADMIN)
+            // Permission, optional (applied only if the user is ADMIN)
             ...(permission === Permission.ADMIN && { permission }),
 
-            // JTI, opcional (aplicado apenas para refresh tokens, para garantir uma assinatura única)
+            // JTI, optional (applied only to refresh tokens, to ensure a unique signature)
             ...(jti && { jti }),
         };
 
@@ -85,10 +85,10 @@ export const AuthService = {
         );
     },
 
-    // Expira a cada 7 dias por padrão
+    // Expires every 7 days by default
     async renewTokens(userId: string, userPermission?: Permission, oldRefreshToken?: string) {
-        if (oldRefreshToken) { // Queimar refresh token antigo
-            // Algum usuário mal intencionado tentou usar um token que já foi revogado
+        if (oldRefreshToken) { // Burn old refresh token
+            // A malicious user tried to use an already revoked token
             const reusingToken = await rTokenDB.findFirst({
                 where: {
                     token: oldRefreshToken,
@@ -97,7 +97,7 @@ export const AuthService = {
             });
 
             if (reusingToken) {
-                // Desconectar todas as sessões desses usuários
+                // Disconnect all sessions of these users
                 await rTokenDB.updateMany({
                     where: {
                         owner_id: userId
@@ -107,7 +107,7 @@ export const AuthService = {
                     }
                 });
 
-                throw new Error("CE-1", { cause: "Esse token já foi utilizado" });
+                throw new Error("CE-1", { cause: "This token has already been used" });
             }
 
             await AuthService.revokeRefreshToken(oldRefreshToken);
@@ -126,7 +126,7 @@ export const AuthService = {
             }
         });
 
-        // Retornar parâmetros que criarão o cookie
+        // Return parameters that will create the cookie
         return { accessToken, refreshToken };
     },
 

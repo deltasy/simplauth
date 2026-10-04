@@ -22,16 +22,16 @@ describe("Pipeline: /me", () => {
         expect(thisUserResponse.status).toBe(200);
     })
 
-    test("Access Token inválido", async () => {
+    test("Invalid Access Token", async () => {
         const { accessToken } = await signCatch("sign-in", memberUser);
 
-        // Token válido
+        // Valid token
         const validTokenResponse = await request(app)
             .get(myUserRoute.raw).withAuth(accessToken);
 
         expect(validTokenResponse.status).toBe(200)
 
-        // Token inválido
+        // Invalid token
         const invalidTokenResponse = await request(app)
             .get(myUserRoute.raw).withAuth("Bearer INVALID");
 
@@ -41,8 +41,8 @@ describe("Pipeline: /me", () => {
 })
 
 describe("Pipeline: /:profile_name", () => {
-    test("OK (Visitar próprio perfil)", async () => {
-        // Quando isso acontece, informações normalmente privadas estarão visíveis (pois é o próprio usuário)
+    test("OK (Visit own profile)", async () => {
+        // When this happens, normally private information will be visible (because it is the user themselves)
         const profile = memberUser.username
 
         const { accessToken } = await signCatch("sign-in", memberUser);
@@ -52,11 +52,11 @@ describe("Pipeline: /:profile_name", () => {
 
         expect(response.status).toBe(200);
 
-        // "E-mail" aparece pro próprio usuário
+        // "E-mail" appears for the user themselves
         expect(response.body.email).toBeDefined();
     })
 
-    test("OK (Visitar outro perfil)", async () => {
+    test("OK (Visit another profile)", async () => {
         const profile = adminUser.username
 
         const { accessToken } = await signCatch("sign-in", memberUser);
@@ -66,11 +66,11 @@ describe("Pipeline: /:profile_name", () => {
 
         expect(response.status).toBe(200);
 
-        // "E-mail" não aparece na response
+        // "E-mail" does not appear in the response
         expect(response.body.email).toBeUndefined();
     })
 
-    test("Inválido", async () => {
+    test("Invalid", async () => {
         const profile = "UNKNOWN"
 
         const { accessToken } = await signCatch("sign-in", memberUser);
@@ -100,13 +100,13 @@ describe("Pipeline: /me/edit", () => {
             .withAuth(accessToken, refreshToken);
         expect(editResponse.status).toBe(200);
 
-        // Verificar se o campo foi alterado
+        // Check if the field was changed
         const response = await request(app)
             .get(myUserRoute.raw).withAuth(accessToken);
         expect(response.body.username).toBe(newUsername);
     });
 
-    test("Campo indisponível", async () => {
+    test("Unavailable field", async () => {
         // Login
         const user = await createTestUser();
         const { accessToken, refreshToken } = await signCatch("sign-in", user);
@@ -120,11 +120,11 @@ describe("Pipeline: /me/edit", () => {
         expect(editResponse.status).toBe(422);
     });
 
-    test("Refresh token inválido ou inexistente", async () => {
+    test("Invalid or missing refresh token", async () => {
         // Login
         const { accessToken } = await signCatch("sign-in", memberUser);
 
-        // Deletar conta
+        // Delete account
         const editResponse = await request(app)
             .put(userEditRoute.raw).withAuth(accessToken);
         expect(editResponse.status).toBe(401);
@@ -139,21 +139,21 @@ describe("Pipeline: /me/delete", () => {
 
         const { accessToken, refreshToken } = await signCatch("sign-in", user);
 
-        // Deletar conta
+        // Delete account
         const deleteResponse = await request(app)
             .delete(userDeleteRoute.raw).withAuth(accessToken, refreshToken);
         expect(deleteResponse.status).toBe(200);
 
-        // Verificar se o perfil deixou de existir
+        // Check if the profile no longer exists
         const { response } = await signCatch("sign-in", user);
         expect(response.status).toBe(401);
     });
 
-    test("Refresh token inválido", async () => {
+    test("Invalid refresh token", async () => {
         // Login
         const { accessToken } = await signCatch("sign-in", memberUser);
 
-        // Deletar conta
+        // Delete account
         const deleteResponse = await request(app)
             .get(userDeleteRoute.raw).withAuth(accessToken, "INVALID RTOKEN");
         expect(deleteResponse.status).toBe(404);
@@ -165,13 +165,13 @@ describe("Pipeline: /check?attr=val", () => {
         // Login
         const { accessToken } = await signCatch("sign-in", memberUser);
 
-        // Deletar conta
+        // Check attribute
         const checkResponse = await request(app)
             .get(checkAttRoute.raw + "?username=uniqueUsername421").withAuth(accessToken);
         expect(checkResponse.status).toBe(200);
     });
 
-    test("Atributo já existente", async () => {
+    test("Attribute already exists", async () => {
         const { accessToken } = await signCatch("sign-in", memberUser);
 
         const checkResponse = await request(app)
@@ -179,7 +179,7 @@ describe("Pipeline: /check?attr=val", () => {
         expect(checkResponse.status).toBe(409);
     });
 
-    test("Atributo inválido", async () => {
+    test("Invalid attribute", async () => {
         const { accessToken } = await signCatch("sign-in", memberUser);
 
         const checkResponse = await request(app)
@@ -187,7 +187,7 @@ describe("Pipeline: /check?attr=val", () => {
         expect(checkResponse.status).toBe(422);
     });
 
-    test("Sessão inválida", async () => {
+    test("Invalid session", async () => {
         const checkResponse = await request(app)
             .get(checkAttRoute.raw + "?username=uniqueUsername421").withAuth("INVALID ATOKEN");
         expect(checkResponse.status).toBe(401);
