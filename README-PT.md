@@ -144,4 +144,4 @@ Esses são os principais atalhos configurados no `package.json` raiz:
 - `npm run dev:web`: levanta só o servidor do frontend no terminal local.
 - `npm run test:unit`: roda os testes unitários do backend.
 - `npm run test:integration:local`: executa os testes de integração da API baseado no banco de dados atual.
-- `npm run actions`: atalho rápido para fazer stage de tudo, commit --amend e push forçado.
+- `npm run actions`: atalho rápido para fazer stage de tudo, com push forçado.
